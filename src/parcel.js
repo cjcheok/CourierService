@@ -6,6 +6,8 @@ class Parcel{
         this.distance = 0;
         this.voucherCode = '';
 
+        this.total = 0;
+        this.discount = 0;
         this.cost = 0;
         
         let arrInputs = inputs.split(' ');
@@ -30,6 +32,14 @@ class Parcel{
 
     getCost( baseCost, weightMultiplyer, distanceMultiplyer ){
         return this.cost = baseCost + ( this.distance * distanceMultiplyer) + (weightMultiplyer * this.weight);
+    }
+
+    getDiscount( discountPercentage ){
+        return this.discount = this.cost * discountPercentage / 100;
+    }
+
+    getTotal(){
+        return this.total = this.cost - this.discount;
     }
 }
 

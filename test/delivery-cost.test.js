@@ -117,6 +117,20 @@ describe("Delivery Cost Tests", () => {
         expect( voucherCollection.getDiscount( parcel ) ).toBe(5);
     });
 
+    test("Parcel - Calculate Discount & Total Cost", async () => {
+        let voucherCollection = new VoucherCollection( voucherInputs );
+
+        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
+        expect( parcel.getDiscount( voucherCollection.getDiscount(parcel) ) ).toBe(0);
+        expect( parcel.getTotal() ).toBe(175);
+
+        parcel = new Parcel( "PKG3 10 100 OFR003" );
+        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(700);
+        expect( parcel.getDiscount( voucherCollection.getDiscount(parcel) ) ).toBe(35);
+        expect( parcel.getTotal() ).toBe(665);
+    });
+
 
     test("Test", async () => {
         let dc = new DeliveryCost();
