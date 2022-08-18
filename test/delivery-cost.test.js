@@ -2,6 +2,7 @@
 const DeliveryCost = require('../src/delivery-cost');
 const Voucher = require('../src/voucher');
 const Parcel = require('../src/parcel');
+const VoucherCollection = require('../src/voucher-collection');
 
 let fs = require('fs');
 // Load vouchers
@@ -84,6 +85,10 @@ describe("Delivery Cost Tests", () => {
         expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
     });
 
+    test("Voucher Collection - Create voucher collection from file input", async () => {
+        let voucherCollection = new VoucherCollection( voucherInputs );
+        expect( voucherCollection.length() ).toBe(3);
+    });
 
 
     test("Test", async () => {
