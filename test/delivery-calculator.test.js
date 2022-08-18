@@ -97,20 +97,20 @@ describe("Delivery Cost Tests", () => {
         }
     });
 
-
     test("Parcel - Calculate Cost", async () => {
         let parcel = new Parcel( "PKG1 5 5 OFR001" );
         expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
 
         parcel = new Parcel( "PKG1 15 5 OFR001" );
         expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
+
     });
 
     test("Voucher Collection - Create voucher collection from file input", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
         expect( voucherCollection.length() ).toBe(3);
     });
-
+    
     test("Voucher Collection - Search voucher by code", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
         expect( voucherCollection.find( 'OFR002' ) ).not.toBeNull();
@@ -146,8 +146,10 @@ describe("Delivery Cost Tests", () => {
 
         parcel = new Parcel( "PKG3 10 100 OFR003" );
         expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(665);
+
+        parcel = new Parcel( "PKG4 110 60 OFR002" );
+        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(1395);
     });
-    
 
 
     test("DeliveryCalculator - generate delivery cost with valid inputs", async () => {
@@ -168,12 +170,10 @@ describe("Delivery Cost Tests", () => {
     });
 
     test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
-
-        console.log(deliveryTimeInputs);
         try{
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
-            deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
+            console.log( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) );
             expect( deliveryCalculator.vechicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);
             expect( deliveryCalculator.maxLoad ).toBe(200);

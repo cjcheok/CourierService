@@ -69,6 +69,15 @@ class DeliveryCalculator{
         if( this.parcels.length != this.numberOfParcel ){
             throw('Number of parcels mismatch.');
         }
+
+        let strOutput = '';
+
+        this.parcels.forEach( parcel => {
+            parcel.calculateTotal( this.baseCost, this.weightMultiplyer, this.distanceMultiplyer, this.voucherCollection.getDiscount( parcel )  );
+            strOutput += parcel.id + ' ' + parcel.discount + ' ' + parcel.total + ' ' + parcel.hours + '\n';
+        });
+
+        return strOutput.slice(0, -1);
     }
 
     outputDeliveryCost( inputs ){

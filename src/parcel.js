@@ -1,6 +1,7 @@
 class Parcel{
 
     constructor( inputs ){
+
         this.id = '';
         this.weight = 0;
         this.distance = 0;
@@ -23,7 +24,7 @@ class Parcel{
             this.id = arrInputs[0];
             this.weight = parseFloat( arrInputs[1] );
             this.distance = parseFloat( arrInputs[2] );
-            this.voucherCode = arrInputs[3];
+            this.voucherCode = arrInputs[3].replace(/(\r\n|\n|\r)/gm, "");
         }
         else{
             throw('Parameters mismatch.');
@@ -40,6 +41,7 @@ class Parcel{
     }
 
     calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
+
         this.calculateCost( baseCost, weightMultiplyer, distanceMultiplyer );
         this.calculateDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
