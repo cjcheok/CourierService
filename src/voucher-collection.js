@@ -1,5 +1,5 @@
 const Voucher = require('./voucher');
-
+const Parcel = require('./parcel');
 class VoucherCollection{
 
     constructor( inputs ){
@@ -14,13 +14,23 @@ class VoucherCollection{
     }
 
     find( code ){
-        let found = false;
+        let foundVoucher = null;
         this.vouchers.forEach( voucher => {
             if( voucher.code == code ) {
-                found = true;
+                foundVoucher = voucher;
             }
         });
-        return found;
+        return foundVoucher;
+    }
+
+    match( parcel ){
+        let voucher = this.find( parcel.voucherCode );
+        if( voucher ){
+            if( voucher.minWeight <= parcel.weight && parcel.weight <= voucher.maxWeight && voucher.minDistance <= parcel.distance && parcel.distance <= voucher.maxDistance ) return true;
+        
+        }        
+        
+        return false;
     }
 
 }

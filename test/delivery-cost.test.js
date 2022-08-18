@@ -92,11 +92,18 @@ describe("Delivery Cost Tests", () => {
 
     test("Voucher Collection - Search voucher by code", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
-        expect( voucherCollection.find( 'OFR002' ) ).toBe( true );
-
-        expect( voucherCollection.find( 'OFR005' ) ).toBe( false );
+        expect( voucherCollection.find( 'OFR002' ) ).not.toBeNull();
+        expect( voucherCollection.find( 'OFR005' ) ).toBeNull();
     });
 
+    test("Voucher Collection - Perform search by passing parcel object.", async () => {
+        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        let voucherCollection = new VoucherCollection( voucherInputs );
+        expect( voucherCollection.match( parcel ) ).toBe( false );
+
+        parcel = new Parcel( "PKG3 10 100 OFR003" );
+        expect( voucherCollection.match( parcel ) ).toBe( true );
+    });
 
     test("Test", async () => {
         let dc = new DeliveryCost();
