@@ -1,7 +1,7 @@
 
 const DeliveryCost = require('../src/delivery-cost');
 const Voucher = require('../src/voucher');
-
+const Parcel = require('../src/parcel');
 
 let fs = require('fs');
 // Load vouchers
@@ -42,6 +42,17 @@ describe("Delivery Cost Tests", () => {
             expect( er ).toBe('Invalid parameter formats.');
         }
     });
+
+
+    test("Parcel - Create parcel with valid inputs", async () => {
+        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        expect( parcel.id ).toBe('PKG1');
+        expect( parcel.weight ).toBe(5);
+        expect( parcel.distance ).toBe(5);
+        expect( parcel.voucherCode ).toBe('OFR001');
+    });
+
+
 
     test("Test", async () => {
         let dc = new DeliveryCost();
