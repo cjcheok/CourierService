@@ -90,6 +90,13 @@ describe("Delivery Cost Tests", () => {
         expect( voucherCollection.length() ).toBe(3);
     });
 
+    test("Voucher Collection - Search voucher by code", async () => {
+        let voucherCollection = new VoucherCollection( voucherInputs );
+        expect( voucherCollection.find( 'OFR002' ) ).toBe( true );
+
+        expect( voucherCollection.find( 'OFR005' ) ).toBe( false );
+    });
+
 
     test("Test", async () => {
         let dc = new DeliveryCost();

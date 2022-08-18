@@ -13,6 +13,16 @@ class VoucherCollection{
         return this.vouchers.length;
     }
 
+    find( code ){
+        let found = false;
+        this.vouchers.forEach( voucher => {
+            if( voucher.code == code ) {
+                found = true;
+            }
+        });
+        return found;
+    }
+
 }
 
 module.exports = VoucherCollection;
