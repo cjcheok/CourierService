@@ -40,11 +40,21 @@ class Parcel{
         return this.discount = this.cost * discountPercentage / 100;
     }
 
-    calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
+    calculateHours( maxSpeed ){
+        return this.hours = parseFloat( (this.distance / maxSpeed).toFixed(3).slice(0,-1) );
+    }
 
+    calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
         this.calculateCost( baseCost, weightMultiplyer, distanceMultiplyer );
         this.calculateDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
+    }
+
+    outputCost(){
+        return this.id + ' ' + this.discount + ' ' + this.total + '\n';
+    }
+    outputTime(){
+        return this.id + ' ' + this.discount + ' ' + this.total + ' ' + this.hours + '\n';
     }
 }
 

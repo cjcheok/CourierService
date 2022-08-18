@@ -177,6 +177,8 @@ describe("Delivery Cost Tests", () => {
             expect( deliveryCalculator.vechicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);
             expect( deliveryCalculator.maxLoad ).toBe(200);
+
+            deliveryCalculator.groupParcels();
         }catch(er){
             expect(er).toBe('Number of parcels mismatch.');
         }
