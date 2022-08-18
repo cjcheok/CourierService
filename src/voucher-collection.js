@@ -5,7 +5,7 @@ class VoucherCollection{
     constructor( inputs ){
         this.vouchers = [];
         inputs.split('\n').forEach( input => {
-            this.vouchers.push( new Voucher(input) );
+            if( input.length != 0 ) this.vouchers.push( new Voucher(input) );
         });
     }
 
