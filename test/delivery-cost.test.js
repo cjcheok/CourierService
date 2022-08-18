@@ -17,7 +17,7 @@ try {
 describe("Delivery Cost Tests", () => {
 
     // setup voucher
-    test("Voucher - Create Vocuer with valid inputs", async () => {
+    test("Voucher - Create voucher with valid inputs", async () => {
         let voucher = new Voucher( "OFR001 10 0 200 70 200" );
         expect( voucher.code ).toBe('OFR001');
         expect( voucher.percentage ).toBe(10);
@@ -27,9 +27,17 @@ describe("Delivery Cost Tests", () => {
         expect( voucher.maxWeight ).toBe(200);
     });
 
-    test("Voucher - Create Vocuer with invalid inputs", async () => {
+    test("Voucher - Create voucher with invalid inputs", async () => {
         try{
             let voucher = new Voucher( "OFR001 10 A 200 70 200" );
+        }catch( er ){
+            expect( er ).toBe('Invalid parameter formats.');
+        }
+    });
+
+    test("Voucher - Create voucher with negative numeric inputs", async () => {
+        try{
+            let voucher = new Voucher( "OFR001 -10 0 -200 -70 -200" );
         }catch( er ){
             expect( er ).toBe('Invalid parameter formats.');
         }

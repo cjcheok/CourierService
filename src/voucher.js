@@ -15,7 +15,7 @@ class Voucher{
 
             let hasError = false;
             for( let i=1; i<arrInputs.length; i++ ){
-                if( isNaN(arrInputs[i]) ) {
+                if( isNaN(arrInputs[i]) || parseFloat(arrInputs[i]) < 0 ) {
                     hasError = true;
                 }
             }
