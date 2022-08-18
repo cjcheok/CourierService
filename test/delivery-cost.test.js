@@ -27,6 +27,14 @@ describe("Delivery Cost Tests", () => {
         expect( voucher.maxWeight ).toBe(200);
     });
 
+    test("Voucher - Create Vocuer with invalid inputs", async () => {
+        try{
+            let voucher = new Voucher( "OFR001 10 A 200 70 200" );
+        }catch( er ){
+            expect( er ).toBe('Invalid parameter formats.');
+        }
+    });
+
     test("Test", async () => {
         let dc = new DeliveryCost();
     });
