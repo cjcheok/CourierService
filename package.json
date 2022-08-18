@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "delivery-cost": "node src/delivery-cost-cla.js",
+    "test delivery-cost": "jest ---delivery-cost.test.js"
   },
   "repository": {
     "type": "git",

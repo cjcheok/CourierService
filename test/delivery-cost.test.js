@@ -17,14 +17,14 @@ try {
 // Load vouchers
 let deliverycostInputs = '';
 try {  
-    deliverycostInputs = fs.readFileSync('inputs/deliverycost.txt', 'utf8');
+    deliverycostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
 
 let deliverycostInputsInvalid = '';
 try {  
-    deliverycostInputsInvalid = fs.readFileSync('inputs/deliverycostInvalid.txt', 'utf8');
+    deliverycostInputsInvalid = fs.readFileSync('inputs/delivery-cost-invalid.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
