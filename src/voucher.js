@@ -1,3 +1,4 @@
+const Parcel = require('./parcel');
 class Voucher{
 
 
@@ -34,6 +35,19 @@ class Voucher{
         else{
             throw('Parameters mismatch.');
         }
+    }
+
+    isEligible( parcel ){
+        return ( this.weightInRange(parcel.weight) && this.distanceInRange(parcel.distance) );
+    }
+    weightInRange( weight ){
+        return this.inRange(weight, this.minWeight, this.maxWeight );
+    }
+    distanceInRange( distance ){
+        return this.inRange(distance, this.minDistance, this.maxDistance );
+    }
+    inRange( val, min, max ){
+        return (min <= val && val <= max );
     }
 }
 

@@ -26,11 +26,16 @@ class VoucherCollection{
     match( parcel ){
         let voucher = this.find( parcel.voucherCode );
         if( voucher ){
-            if( voucher.minWeight <= parcel.weight && parcel.weight <= voucher.maxWeight && voucher.minDistance <= parcel.distance && parcel.distance <= voucher.maxDistance ) return true;
-        
+            if( voucher.isEligible( parcel ) ) return voucher;
         }        
-        
-        return false;
+        return null;
+    }
+
+
+    getDiscount( parcel ) {
+        let voucher = this.match( parcel );
+        if( voucher ) return voucher.percentage;
+        else return 0;
     }
 
 }

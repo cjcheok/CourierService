@@ -99,11 +99,24 @@ describe("Delivery Cost Tests", () => {
     test("Voucher Collection - Perform search by passing parcel object.", async () => {
         let parcel = new Parcel( "PKG1 5 5 OFR001" );
         let voucherCollection = new VoucherCollection( voucherInputs );
-        expect( voucherCollection.match( parcel ) ).toBe( false );
+        expect( voucherCollection.match( parcel ) ).toBeNull();
 
         parcel = new Parcel( "PKG3 10 100 OFR003" );
-        expect( voucherCollection.match( parcel ) ).toBe( true );
+        voucherCollection.match( parcel ) ;
+        expect( voucherCollection.match( parcel ) ).not.toBeNull();
     });
+
+
+    test("Voucher Collection - Get Discount.", async () => {
+        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        let voucherCollection = new VoucherCollection( voucherInputs );
+        expect( voucherCollection.getDiscount( parcel ) ).toBe(0);
+
+        parcel = new Parcel( "PKG3 10 100 OFR003" );
+        voucherCollection.match( parcel ) ;
+        expect( voucherCollection.getDiscount( parcel ) ).toBe(5);
+    });
+
 
     test("Test", async () => {
         let dc = new DeliveryCost();
