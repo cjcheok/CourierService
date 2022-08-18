@@ -5,6 +5,8 @@ class Parcel{
         this.weight = 0;
         this.distance = 0;
         this.voucherCode = '';
+
+        this.cost = 0;
         
         let arrInputs = inputs.split(' ');
         if( arrInputs.length == 4 ){
@@ -23,6 +25,11 @@ class Parcel{
         else{
             throw('Parameters mismatch.');
         }
+    }
+    
+
+    getCost( baseCost, weightMultiplyer, distanceMultiplyer ){
+        return this.cost = baseCost + ( this.distance * distanceMultiplyer) + (weightMultiplyer * this.weight);
     }
 }
 

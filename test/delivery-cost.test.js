@@ -78,10 +78,10 @@ describe("Delivery Cost Tests", () => {
 
     test("Parcel - Calculate Cost", async () => {
         let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( BASE_COST + (parcel.weight * WEIGHT_MULTIPLYER) + parcel.distance * DISTANCE_MULTIPLYER ).toBe(175);
+        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
 
         parcel = new Parcel( "PKG1 15 5 OFR001" );
-        expect( BASE_COST + (parcel.weight * WEIGHT_MULTIPLYER) + parcel.distance * DISTANCE_MULTIPLYER ).toBe(275);
+        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
     });
 
 
