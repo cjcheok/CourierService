@@ -16,6 +16,11 @@ try {
 
 describe("Delivery Cost Tests", () => {
 
+
+    const BASE_COST = 100;
+    const WEIGHT_MULTIPLYER = 10;
+    const DISTANCE_MULTIPLYER = 5;
+
     // setup voucher
     test("Voucher - Create voucher with valid inputs", async () => {
         let voucher = new Voucher( "OFR001 10 0 200 70 200" );
@@ -50,6 +55,33 @@ describe("Delivery Cost Tests", () => {
         expect( parcel.weight ).toBe(5);
         expect( parcel.distance ).toBe(5);
         expect( parcel.voucherCode ).toBe('OFR001');
+    });
+
+    test("Parcel - Create parcel with invalid inputs", async () => {
+        try{
+            let parcel = new Parcel( "PKG1 A A OFR001" );
+        }
+        catch(er){
+            throw(er).toBe('Invalid parameter formats.');
+        }
+    });
+
+    test("Parcel - Create parcel with negative numberic inputs", async () => {
+        try{
+            let parcel = new Parcel( "PKG1 -5 -100 OFR001" );
+        }
+        catch(er){
+            throw(er).toBe('Invalid parameter formats.');
+        }
+    });
+
+
+    test("Parcel - Calculate Cost", async () => {
+        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        expect( BASE_COST + (parcel.weight * WEIGHT_MULTIPLYER) + parcel.distance * DISTANCE_MULTIPLYER ).toBe(175);
+
+        parcel = new Parcel( "PKG1 15 5 OFR001" );
+        expect( BASE_COST + (parcel.weight * WEIGHT_MULTIPLYER) + parcel.distance * DISTANCE_MULTIPLYER ).toBe(275);
     });
 
 
