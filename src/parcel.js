@@ -6,6 +6,7 @@ class Parcel{
         this.distance = 0;
         this.voucherCode = '';
 
+        this.hours = 0;
         this.total = 0;
         this.discount = 0;
         this.cost = 0;
@@ -30,17 +31,17 @@ class Parcel{
     }
     
 
-    getCost( baseCost, weightMultiplyer, distanceMultiplyer ){
+    calculateCost( baseCost, weightMultiplyer, distanceMultiplyer ){
         return this.cost = baseCost + ( this.distance * distanceMultiplyer) + (weightMultiplyer * this.weight);
     }
 
-    getDiscount( discountPercentage ){
+    calculateDiscount( discountPercentage ){
         return this.discount = this.cost * discountPercentage / 100;
     }
 
-    getTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
-        this.getCost( baseCost, weightMultiplyer, distanceMultiplyer );
-        this.getDiscount( discountPercentage );
+    calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
+        this.calculateCost( baseCost, weightMultiplyer, distanceMultiplyer );
+        this.calculateDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
     }
 }

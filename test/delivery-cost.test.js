@@ -1,5 +1,5 @@
 
-const DeliveryCost = require('../src/delivery-cost');
+const DeliveryCalculator = require('../src/delivery-calculator');
 const Voucher = require('../src/voucher');
 const Parcel = require('../src/parcel');
 const VoucherCollection = require('../src/voucher-collection');
@@ -15,16 +15,23 @@ try {
 }
 
 // Load vouchers
-let deliverycostInputs = '';
+let deliveryCostInputs = '';
 try {  
-    deliverycostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
+    deliveryCostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
 
-let deliverycostInputsInvalid = '';
+let deliveryCostInputsInvalid = '';
 try {  
-    deliverycostInputsInvalid = fs.readFileSync('inputs/delivery-cost-invalid.txt', 'utf8');
+    deliveryCostInputsInvalid = fs.readFileSync('inputs/delivery-cost-invalid.txt', 'utf8');
+} catch(e) {
+    console.log('Error:', e.stack);
+}
+
+let deliveryTimeInputs = '';
+try {  
+    deliveryTimeInputs = fs.readFileSync('inputs/delivery-time-estimation.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
@@ -93,10 +100,10 @@ describe("Delivery Cost Tests", () => {
 
     test("Parcel - Calculate Cost", async () => {
         let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
+        expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
 
         parcel = new Parcel( "PKG1 15 5 OFR001" );
-        expect( parcel.getCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
+        expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
     });
 
     test("Voucher Collection - Create voucher collection from file input", async () => {
@@ -135,29 +142,44 @@ describe("Delivery Cost Tests", () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
 
         let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( parcel.getTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(175);
+        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(175);
 
         parcel = new Parcel( "PKG3 10 100 OFR003" );
-        expect( parcel.getTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(665);
+        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(665);
     });
     
 
 
-    test("DeliveryCost - with valid inputs", async () => {
-        let deliveryCost = new DeliveryCost(10,5);
-        deliveryCost.initVoucher( voucherInputs );
-        //console.log( deliveryCost.output( deliverycostInputs ) );
-        expect( deliveryCost.output( deliverycostInputs ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
+    test("DeliveryCalculator - generate delivery cost with valid inputs", async () => {
+        let deliveryCalculator = new DeliveryCalculator(10,5);
+        deliveryCalculator.initVoucher( voucherInputs );
+        expect( deliveryCalculator.outputDeliveryCost( deliveryCostInputs ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
     });
     
-    test("DeliveryCost - with invalid inputs", async () => {
+    test("DeliveryCalculator - generate delivery cost with invalid inputs", async () => {
 
         try{
-            let deliveryCost = new DeliveryCost(10,5);
-            deliveryCost.initVoucher( voucherInputs );
-            expect( deliveryCost.output( deliverycostInputsInvalid ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+            expect( deliveryCalculator.outputDeliveryCost( deliveryCostInputsInvalid ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
         }catch(er){
             expect(er).toBe('Number of parcels mismatch.');
         }
+    });
+
+    test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
+
+        console.log(deliveryTimeInputs);
+        try{
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+            deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
+            expect( deliveryCalculator.vechicles ).toBe(2);
+            expect( deliveryCalculator.maxSpeed ).toBe(70);
+            expect( deliveryCalculator.maxLoad ).toBe(200);
+        }catch(er){
+            expect(er).toBe('Number of parcels mismatch.');
+        }
+
     });
 });

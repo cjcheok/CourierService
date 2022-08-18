@@ -1,4 +1,4 @@
-const DeliveryCost = require('../src/delivery-cost');
+const DeliveryCalculator = require('./delivery-calculator');
 let fs = require('fs');
 
 let voucherInputs = '';
@@ -19,6 +19,6 @@ console.log('------------- Start -------------');
 console.log('Delivery Cost Input : ');
 console.log( deliverycostInputs + '\n' );
 console.log('Delivery Cost Output : ');
-let deliveryCost = new DeliveryCost(10,5);
-deliveryCost.initVoucher( voucherInputs );
-console.log( deliveryCost.output( deliverycostInputs ) + "\n------------- END -------------\n\n" );
+let deliveryCalculator = new DeliveryCalculator(10,5);
+deliveryCalculator.initVoucher( voucherInputs );
+console.log( deliveryCalculator.outputDeliveryCost( deliverycostInputs ) + "\n------------- END -------------\n\n" );
