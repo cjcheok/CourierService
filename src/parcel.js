@@ -38,7 +38,9 @@ class Parcel{
         return this.discount = this.cost * discountPercentage / 100;
     }
 
-    getTotal(){
+    getTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
+        this.getCost( baseCost, weightMultiplyer, distanceMultiplyer );
+        this.getDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
     }
 }
