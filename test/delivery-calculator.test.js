@@ -173,12 +173,12 @@ describe("Delivery Cost Tests", () => {
         try{
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
-            console.log( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) );
-            expect( deliveryCalculator.vechicles ).toBe(2);
+            expect( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
+            expect( deliveryCalculator.numberOfVehicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);
             expect( deliveryCalculator.maxLoad ).toBe(200);
 
-            deliveryCalculator.groupParcels();
+            
         }catch(er){
             expect(er).toBe('Number of parcels mismatch.');
         }

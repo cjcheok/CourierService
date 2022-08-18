@@ -7,7 +7,7 @@ class DeliveryCalculator{
     constructor( weightMultiplyer, distanceMultiplyer ){
         this.weightMultiplyer = weightMultiplyer;
         this.distanceMultiplyer = distanceMultiplyer;
-        this.vechicles = 0;
+        this.numberOfVehicles = 0;
         this.maxLoad = 0;
         this.maxSpeed = 0;
 
@@ -15,6 +15,8 @@ class DeliveryCalculator{
         this.baseCost = 0;
         this.numberOfParcel = 0;
         this.parcels = [];
+
+        this.vechicles = [];
 
 
         this.parcelGroup = [];
@@ -74,8 +76,32 @@ class DeliveryCalculator{
                 }
             }
         }
+        this.parcelGroup = arrBestGroup;
 
-        console.log(arrBestGroup);
+        while( this.parcelGroup.length > 0 ){
+
+            let vehicleIndex = this.getFastestAvailableVehicle();
+            
+            let longestTime = 0;
+            for( let i=0; i<this.parcelGroup[0].group.length; i++ ){
+                this.parcels[ this.parcelGroup[0].group[i] ].calculateTime( this.maxSpeed, this.vechicles[vehicleIndex] );
+                if( this.parcels[ this.parcelGroup[0].group[i] ].travelTime > longestTime ) longestTime = this.parcels[ this.parcelGroup[0].group[i] ].travelTime;
+            }
+            this.vechicles[vehicleIndex] += longestTime * 2;
+            this.parcelGroup.shift();
+        }
+    }
+
+    getFastestAvailableVehicle(){
+        let vehicleIndex = -1;
+        let waitTime = 9999999;
+        this.vechicles.forEach( (element,index) => {
+            if( element < waitTime ){
+                waitTime = element;
+                vehicleIndex = index;
+            }
+        });
+        return vehicleIndex;
     }
 
     generateAllGroups( arraySize ){
@@ -146,9 +172,13 @@ class DeliveryCalculator{
                 if( arrParameters.length == 3 ){
 
                     if( !isNaN( arrParameters[0] ) && !isNaN( arrParameters[1] ) && !isNaN( arrParameters[2] ) ){
-                        this.vechicles = parseInt( arrParameters[0] );
+                        this.numberOfVehicles = parseInt( arrParameters[0] );
                         this.maxSpeed = parseInt( arrParameters[1] );
                         this.maxLoad = parseInt( arrParameters[2] );
+
+                        for( let i=0; i<this.numberOfVehicles; i++ ){
+                            this.vechicles.push(0);
+                        }
                     }
                     else{
                         throw('Invalid input format.');
@@ -173,11 +203,14 @@ class DeliveryCalculator{
 
         let strOutput = '';
 
+        this.groupParcels();
+
         this.parcels.forEach( parcel => {
-            parcel.calculateHours( this.maxSpeed );
+            //parcel.calculateTravelTime( this.maxSpeed );
             parcel.calculateTotal( this.baseCost, this.weightMultiplyer, this.distanceMultiplyer, this.voucherCollection.getDiscount( parcel )  );
             strOutput += parcel.outputTime();
         });
+
 
         return strOutput.slice(0, -1);
     }

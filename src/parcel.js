@@ -7,7 +7,9 @@ class Parcel{
         this.distance = 0;
         this.voucherCode = '';
 
-        this.hours = 0;
+        this.startTime = 0;
+        this.travelTime = 0;
+        this.totalTime = 0;
         this.total = 0;
         this.discount = 0;
         this.cost = 0;
@@ -40,8 +42,10 @@ class Parcel{
         return this.discount = this.cost * discountPercentage / 100;
     }
 
-    calculateHours( maxSpeed ){
-        return this.hours = parseFloat( (this.distance / maxSpeed).toFixed(3).slice(0,-1) );
+    calculateTime( maxSpeed, startTime ){
+        this.travelTime = parseFloat( (this.distance / maxSpeed).toFixed(3).slice(0,-1) );
+        this.startTime = startTime;
+        this.totalTime = (this.startTime + this.travelTime).toFixed(2);
     }
 
     calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
@@ -54,7 +58,7 @@ class Parcel{
         return this.id + ' ' + this.discount + ' ' + this.total + '\n';
     }
     outputTime(){
-        return this.id + ' ' + this.discount + ' ' + this.total + ' ' + this.hours + '\n';
+        return this.id + ' ' + this.discount + ' ' + this.total + ' ' + this.totalTime + '\n';
     }
 }
 
