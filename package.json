@@ -1,0 +1,24 @@
+{
+  "name": "courierservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjcheok/CourierService.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cjcheok/CourierService/issues"
+  },
+  "homepage": "https://github.com/cjcheok/CourierService#readme",
+  "dependencies": {
+    "jest": "^28.1.3",
+    "save-dev": "^0.0.1-security"
+  }
+}
