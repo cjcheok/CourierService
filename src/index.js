@@ -1,3 +1,11 @@
+
+let axrr = [1,2,3];
+let [ax2,bx,cx] = axrr;
+
+
+console.log( ax2, bx, cx);
+
+return;
 let arr = [
     {weight:50,id:0},
     {weight:75,id:1},

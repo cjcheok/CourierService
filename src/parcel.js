@@ -22,11 +22,11 @@ class Parcel{
                 if( isNaN(arrInputs[i]) || parseFloat(arrInputs[i]) < 0 ) {
                     hasError = true;
                 }
+                else
+                    arrInputs[i] = parseFloat(arrInputs[i]);
             }
-            this.id = arrInputs[0];
-            this.weight = parseFloat( arrInputs[1] );
-            this.distance = parseFloat( arrInputs[2] );
-            if( arrInputs.length > 3 ) this.voucherCode = arrInputs[3];
+            if( arrInputs.length < 4 ) arrInputs.push( '' );
+            [this.id, this.weight, this.distance, this.voucherCode] = arrInputs;
         }
         else{
             throw('Parameters mismatch.');

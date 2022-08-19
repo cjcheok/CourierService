@@ -176,7 +176,8 @@ describe("Delivery Cost Tests", () => {
             deliveryCalculator.initVoucher( voucherInputs );
 
             try{
-                expect( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
+                let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
+                expect( result ).toBe('1PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
             }catch(er){
                 expect(er).not.toBeNull();
             }

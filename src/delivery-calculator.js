@@ -150,6 +150,8 @@ class DeliveryCalculator{
 
     processInputs( inputs){
 
+        this.parcels = [];
+
         inputs.split("\n").forEach( (element, i) => {
             
             if( i == 0 ){
@@ -209,7 +211,7 @@ class DeliveryCalculator{
         
         this.processInputs( inputs );
         this.groupParcels();
-        
+
         let strOutput = '';
         this.parcels.forEach( parcel => {
             parcel.calculateTotal( this.baseCost, this.weightMultiplyer, this.distanceMultiplyer, this.voucherCollection.getDiscount( parcel )  );
