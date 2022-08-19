@@ -191,6 +191,7 @@ class DeliveryCalculator{
                 
                 if( element != "" ){
                     this.parcels.push( new Parcel(element) );
+                    
                 }else{
                     throw('Invalid input format.');
                 }

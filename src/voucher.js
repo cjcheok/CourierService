@@ -10,7 +10,7 @@ class Voucher{
         this.minWeight = 0;
         this.maxWeight = 0;
 
-        let arrInputs = inputs.split(' ');
+        let arrInputs = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
         if( arrInputs.length == 6 ){
             this.code = arrInputs[0];
 

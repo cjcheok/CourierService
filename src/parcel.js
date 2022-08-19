@@ -14,8 +14,8 @@ class Parcel{
         this.discount = 0;
         this.cost = 0;
         
-        let arrInputs = inputs.split(' ');
-        if( arrInputs.length == 4 ){
+        let arrInputs = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
+        if( arrInputs.length >= 3 ){
 
             let hasError = false;
             for( let i=1; i<3; i++ ){
@@ -26,7 +26,7 @@ class Parcel{
             this.id = arrInputs[0];
             this.weight = parseFloat( arrInputs[1] );
             this.distance = parseFloat( arrInputs[2] );
-            this.voucherCode = arrInputs[3].replace(/(\r\n|\n|\r)/gm, "");
+            if( arrInputs.length > 3 ) this.voucherCode = arrInputs[3];
         }
         else{
             throw('Parameters mismatch.');
