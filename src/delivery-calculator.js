@@ -148,7 +148,8 @@ class DeliveryCalculator{
         this.voucherCollection = new VoucherCollection( inputs );
     }
 
-    outputDeliveryTime( inputs ){
+    processInputs( inputs){
+
         inputs.split("\n").forEach( (element, i) => {
             
             if( i == 0 ){
@@ -199,15 +200,18 @@ class DeliveryCalculator{
         });
 
         if( this.parcels.length != this.numberOfParcel ){
-            throw('Number of parcels mismatch.');
+            throw('Invalid input format.');
         }
 
-        let strOutput = '';
+    }
 
+    outputDeliveryTime( inputs ){
+        
+        this.processInputs( inputs );
         this.groupParcels();
-
+        
+        let strOutput = '';
         this.parcels.forEach( parcel => {
-            //parcel.calculateTravelTime( this.maxSpeed );
             parcel.calculateTotal( this.baseCost, this.weightMultiplyer, this.distanceMultiplyer, this.voucherCollection.getDiscount( parcel )  );
             strOutput += parcel.outputTime();
         });
@@ -218,39 +222,9 @@ class DeliveryCalculator{
 
     outputDeliveryCost( inputs ){
 
-        inputs.split("\n").forEach( (element, i) => {
-            
-            if( i == 0 ){
-                let arrParameters = element.split(" ");
-                if( arrParameters.length == 2 ){
-
-                    if( !isNaN( arrParameters[0] ) && !isNaN( arrParameters[1] ) ){
-                        this.baseCost = parseInt( arrParameters[0] );
-                        this.numberOfParcel = parseInt( arrParameters[1] );
-                    }
-                    else{
-                        throw('Invalid input format.');
-                    }
-
-                }else{
-                    throw('Invalid input format.');
-                }
-            }else{
-                
-                if( element != "" ){
-                    this.parcels.push( new Parcel(element) );
-                }else{
-                    throw('Invalid input format.');
-                }
-            }
-        });
-
-        if( this.parcels.length != this.numberOfParcel ){
-            throw('Number of parcels mismatch.');
-        }
+        this.processInputs( inputs );
 
         let strOutput = '';
-
         this.parcels.forEach( parcel => {
             parcel.calculateTotal( this.baseCost, this.weightMultiplyer, this.distanceMultiplyer, this.voucherCollection.getDiscount( parcel )  );
             strOutput += parcel.outputCost();

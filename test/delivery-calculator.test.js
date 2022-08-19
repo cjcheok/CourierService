@@ -165,7 +165,7 @@ describe("Delivery Cost Tests", () => {
             deliveryCalculator.initVoucher( voucherInputs );
             expect( deliveryCalculator.outputDeliveryCost( deliveryCostInputsInvalid ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
         }catch(er){
-            expect(er).toBe('Number of parcels mismatch.');
+            expect(er).toBe('Invalid input format.');
         }
     });
 
@@ -186,7 +186,7 @@ describe("Delivery Cost Tests", () => {
             expect( deliveryCalculator.maxLoad ).toBe(200);
 
         }catch(er){
-            expect(er).toBe('Number of parcels mismatch.');
+            expect(er).toBe('Invalid input format.');
         }
 
     });

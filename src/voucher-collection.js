@@ -5,7 +5,9 @@ class VoucherCollection{
     constructor( inputs ){
         this.vouchers = [];
         inputs.split('\n').forEach( input => {
-            if( input.length != 0 ) this.vouchers.push( new Voucher(input) );
+            if( input.length != 0 ) {
+                this.vouchers.push( new Voucher(input) );
+            }
         });
     }
 
@@ -25,17 +27,13 @@ class VoucherCollection{
 
     match( parcel ){
         let voucher = this.find( parcel.voucherCode );
-        if( voucher ){
-            if( voucher.isEligible( parcel ) ) return voucher;
-        }        
-        return null;
+        return (voucher && voucher.isEligible(parcel) ) ? voucher : null;
     }
 
 
     getDiscount( parcel ) {
         let voucher = this.match( parcel );
-        if( voucher ) return voucher.percentage;
-        else return 0;
+        return voucher ? voucher.percentage : 0;
     }
 
 }
