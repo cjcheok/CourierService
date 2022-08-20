@@ -25,11 +25,16 @@ class Parcel{
                 else
                     arrInputs[i] = parseFloat(arrInputs[i]);
             }
-            if( arrInputs.length < 4 ) arrInputs.push( '' );
-            [this.id, this.weight, this.distance, this.voucherCode] = arrInputs;
+            if( !hasError ){
+                if( arrInputs.length < 4 ) arrInputs.push( '' );
+                [this.id, this.weight, this.distance, this.voucherCode] = arrInputs;
+            }
+            else{
+                throw new Error('Invalid parameter formats.');
+            }
         }
         else{
-            throw('Parameters mismatch.');
+            throw new Error('Parameters mismatch.');
         }
     }
     

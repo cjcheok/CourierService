@@ -27,11 +27,11 @@ class Voucher{
                [this.code, this.percentage, this.minDistance, this.maxDistance, this.minWeight, this.maxWeight] = arrInputs;
             }
             else{
-                throw('Invalid parameter formats.');
+                throw new Error('Invalid parameter formats.');
             }
         }
         else{
-            throw('Parameters mismatch.');
+            throw new Error('Parameters mismatch.');
         }
     }
 

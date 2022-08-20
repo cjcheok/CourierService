@@ -55,19 +55,20 @@ describe("Delivery Cost Tests", () => {
     });
 
     test("Voucher - Create voucher with invalid inputs", async () => {
-        try{
-            let voucher = new Voucher( "OFR001 10 A 200 70 200" );
-        }catch( er ){
-            expect( er ).toBe('Invalid parameter formats.');
-        }
+
+        expect(
+            () => {
+                let voucher = new Voucher( "OFR001 10 A 200 70 200" );
+            }
+        ).toThrow();
     });
 
     test("Voucher - Create voucher with negative numeric inputs", async () => {
-        try{
-            let voucher = new Voucher( "OFR001 -10 0 -200 -70 -200" );
-        }catch( er ){
-            expect( er ).toBe('Invalid parameter formats.');
-        }
+        expect(
+            () => {
+                let voucher = new Voucher( "OFR001 -10 0 -200 -70 -200" );
+            }
+        ).toThrow();
     });
 
 
@@ -80,21 +81,19 @@ describe("Delivery Cost Tests", () => {
     });
 
     test("Parcel - Create parcel with invalid inputs", async () => {
-        try{
-            let parcel = new Parcel( "PKG1 A A OFR001" );
-        }
-        catch(er){
-            throw(er).toBe('Invalid parameter formats.');
-        }
+        expect(
+            () => {
+                let parcel = new Parcel( "PKG1 A A OFR001" );
+            }
+        ).toThrow();
     });
 
     test("Parcel - Create parcel with negative numberic inputs", async () => {
-        try{
-            let parcel = new Parcel( "PKG1 -5 -100 OFR001" );
-        }
-        catch(er){
-            throw(er).toBe('Invalid parameter formats.');
-        }
+        expect(
+            () => {
+                let parcel = new Parcel( "PKG1 -5 -100 OFR001" );
+            }   
+        ).toThrow();
     });
 
     test("Parcel - Calculate Cost", async () => {
@@ -155,40 +154,36 @@ describe("Delivery Cost Tests", () => {
     test("DeliveryCalculator - generate delivery cost with valid inputs", async () => {
         let deliveryCalculator = new DeliveryCalculator(10,5);
         deliveryCalculator.initVoucher( voucherInputs );
-        expect( deliveryCalculator.outputDeliveryCost( deliveryCostInputs ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
+
+        let result = deliveryCalculator.outputDeliveryCost( deliveryCostInputs );
+        expect( result ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
+
+        
     });
     
     test("DeliveryCalculator - generate delivery cost with invalid inputs", async () => {
 
-        try{
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
-            expect( deliveryCalculator.outputDeliveryCost( deliveryCostInputsInvalid ) ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
-        }catch(er){
-            expect(er).toBe('Invalid input format.');
-        }
+            expect(
+                () => {
+                    let result = deliveryCalculator.outputDeliveryCost( deliveryCostInputsInvalid );
+                    expect( result ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
+                }
+            ).toThrow();
     });
 
     test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
-        try{
-            
+
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
 
-            try{
                 let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
-                expect( result ).toBe('1PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
-            }catch(er){
-                expect(er).not.toBeNull();
-            }
+                expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
 
             expect( deliveryCalculator.numberOfVehicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);
             expect( deliveryCalculator.maxLoad ).toBe(200);
-
-        }catch(er){
-            expect(er).toBe('Invalid input format.');
-        }
 
     });
 });
