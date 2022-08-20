@@ -25,6 +25,7 @@ class DeliveryCalculator{
         inputs.split("\n").forEach( (element, i) => {
             
             if( i == 0 ){
+                
                 let arrParameters = element.split(" ");
                 if( arrParameters.length == 2 ){
 
@@ -67,7 +68,7 @@ class DeliveryCalculator{
         });
 
         if( this.parcelCollection.length() != this.numberOfParcel ){
-            throw new Error('Invalid input format.');
+            throw new Error('Numbers of parcels does not match.');
         }
         this.parcelCollection.setNumberOfVehicles( this.numberOfVehicles );
     }

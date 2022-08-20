@@ -1,4 +1,5 @@
 
+
 const DeliveryCalculator = require('../src/delivery-calculator');
 const Voucher = require('../src/voucher');
 const Parcel = require('../src/parcel');
@@ -18,13 +19,6 @@ try {
 let deliveryCostInputs = '';
 try {  
     deliveryCostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
-} catch(e) {
-    console.log('Error:', e.stack);
-}
-
-let deliveryCostInputsInvalid = '';
-try {  
-    deliveryCostInputsInvalid = fs.readFileSync('inputs/delivery-cost-invalid.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
@@ -54,55 +48,128 @@ describe("Delivery Cost Tests", () => {
         expect( voucher.maxWeight ).toBe(200);
     });
 
-    test("Voucher - Create voucher with invalid inputs", async () => {
+    test("Voucher - Create voucher with mismatch parameters", async () => {
+        let arrTest = [
+            "OFR001 0",
+            "OFR001 10 70 200"
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let voucher = new Voucher( element );
+                }
+            ).toThrow();
+        });
+    });
 
-        expect(
-            () => {
-                let voucher = new Voucher( "OFR001 10 A 200 70 200" );
-            }
-        ).toThrow();
+    test("Voucher - Create voucher with invalid inputs", async () => {
+        let arrTest = [
+            "OFR001 A 0 200 70 200",
+            "OFR001 10 B 200 70 200",
+            "OFR001 10 0 C 70 200",
+            "OFR001 10 0 200 D 200",
+            "OFR001 10 0 200 70 E"
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let voucher = new Voucher( element );
+                }
+            ).toThrow();
+        });
     });
 
     test("Voucher - Create voucher with negative numeric inputs", async () => {
-        expect(
-            () => {
-                let voucher = new Voucher( "OFR001 -10 0 -200 -70 -200" );
-            }
-        ).toThrow();
+        let arrTest = [
+            "OFR001 -10 0 200 70 200",
+            "OFR001 10 -1 200 70 200",
+            "OFR001 10 0 -200 70 200",
+            "OFR001 10 0 200 -70 200",
+            "OFR001 10 0 200 70 -200"
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let voucher = new Voucher( element );
+                }
+            ).toThrow();
+        });
     });
 
 
     test("Parcel - Create parcel with valid inputs", async () => {
-        let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( parcel.id ).toBe('PKG1');
-        expect( parcel.weight ).toBe(5);
-        expect( parcel.distance ).toBe(5);
-        expect( parcel.voucherCode ).toBe('OFR001');
+
+        let arrTest = [
+            ['PKG1 5 5 OFR001', 'PKG1', 5,5,'OFR001'],
+            ['PKG2 15 5', 'PKG2',15,5, ''],
+        ];
+        arrTest.forEach( element => {
+            parcel = new Parcel( element[0] );
+            expect( parcel.id ).toBe(element[1]);
+            expect( parcel.weight ).toBe(element[2]);
+            expect( parcel.distance ).toBe(element[3]);
+            expect( parcel.voucherCode ).toBe(element[4]);
+        });
+    });
+
+    test("Parcel - Create parcel with mismatch parameters", async () => {
+        let arrTest = [
+            'PKG1',
+            'PKG1 5',
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let parcel = new Parcel( element );
+                }   
+            ).toThrow();
+        });
+
+      
     });
 
     test("Parcel - Create parcel with invalid inputs", async () => {
-        expect(
-            () => {
-                let parcel = new Parcel( "PKG1 A A OFR001" );
-            }
-        ).toThrow();
+        let arrTest = [
+            'PKG1 A 100 OFR001',
+            'PKG1 5 B OFR001',
+            'PKG1 5 B OFR001',
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let parcel = new Parcel( element );
+                }   
+            ).toThrow();
+        });
+
+      
     });
 
     test("Parcel - Create parcel with negative numberic inputs", async () => {
-        expect(
-            () => {
-                let parcel = new Parcel( "PKG1 -5 -100 OFR001" );
-            }   
-        ).toThrow();
+
+        let arrTest = [
+            'PKG1 -5 100 OFR001',
+            'PKG1 5 -100 OFR001',
+        ];
+        arrTest.forEach( element => {
+            expect(
+                () => {
+                    let parcel = new Parcel( element );
+                }   
+            ).toThrow();
+        });
     });
 
     test("Parcel - Calculate Cost", async () => {
-        let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(175);
 
-        parcel = new Parcel( "PKG1 15 5 OFR001" );
-        expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(275);
-
+        let arrTest = [
+            ["PKG1 5 5 OFR001", 175],
+            ["PKG1 15 5 OFR001", 275],
+        ];
+        arrTest.forEach( element => {
+            let parcel = new Parcel( element[0] );
+            expect( parcel.calculateCost(BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER) ).toBe(element[1]);
+        });
     });
 
     test("Voucher Collection - Create voucher collection from file input", async () => {
@@ -117,37 +184,48 @@ describe("Delivery Cost Tests", () => {
     });
 
     test("Voucher Collection - Perform search by passing parcel object.", async () => {
-        let parcel = new Parcel( "PKG1 5 5 OFR001" );
+        let parcel, result;
         let voucherCollection = new VoucherCollection( voucherInputs );
-        expect( voucherCollection.match( parcel ) ).toBeNull();
-
-        parcel = new Parcel( "PKG3 10 100 OFR003" );
-        voucherCollection.match( parcel ) ;
-        expect( voucherCollection.match( parcel ) ).not.toBeNull();
+        let arrTest = [
+            ["PKG1 5 5 OFR001",false],
+            ["PKG3 10 100 OFR003",true]
+        ];
+        arrTest.forEach( element => {
+            parcel = new Parcel( element[0] );
+            result = voucherCollection.match( parcel );
+            if( element[1] ) expect( result ).not.toBeNull();
+            else expect( result ).toBeNull();
+        });
     });
 
 
     test("Voucher Collection - Get Discount.", async () => {
-        let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        let voucherCollection = new VoucherCollection( voucherInputs );
-        expect( voucherCollection.getDiscount( parcel ) ).toBe(0);
 
-        parcel = new Parcel( "PKG3 10 100 OFR003" );
-        voucherCollection.match( parcel ) ;
-        expect( voucherCollection.getDiscount( parcel ) ).toBe(5);
+        let arrTest = [
+            ["PKG1 5 5 OFR001", 0],
+            ["PKG3 10 100 OFR003", 5],
+        ];
+        let parcel;
+        let voucherCollection = new VoucherCollection( voucherInputs );
+        arrTest.forEach( element => {
+            parcel = new Parcel( element[0] );
+            voucherCollection.match( parcel ) ;
+            expect( voucherCollection.getDiscount( parcel ) ).toBe(element[1]);
+        });
     });
 
     test("Parcel - Calculate Discount & Total Cost", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
-
-        let parcel = new Parcel( "PKG1 5 5 OFR001" );
-        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(175);
-
-        parcel = new Parcel( "PKG3 10 100 OFR003" );
-        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(665);
-
-        parcel = new Parcel( "PKG4 110 60 OFR002" );
-        expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(1395);
+        let arrTest = [
+            ["PKG1 5 5 OFR001", 175],
+            ["PKG3 10 100 OFR003", 665],
+            ["PKG4 110 60 OFR002", 1395],
+        ];
+        let parcel;
+        arrTest.forEach( element => {
+            parcel = new Parcel( element[0] );
+            expect( parcel.calculateTotal( BASE_COST, WEIGHT_MULTIPLYER, DISTANCE_MULTIPLYER, voucherCollection.getDiscount(parcel) ) ).toBe(element[1]);
+        });
     });
 
 
@@ -157,20 +235,46 @@ describe("Delivery Cost Tests", () => {
 
         let result = deliveryCalculator.outputDeliveryCost( deliveryCostInputs );
         expect( result ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
-
-        
     });
     
     test("DeliveryCalculator - generate delivery cost with invalid inputs", async () => {
 
+        let arrTest = [
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
+            "\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
+            "100 C\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
+        ]
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
-            expect(
-                () => {
-                    let result = deliveryCalculator.outputDeliveryCost( deliveryCostInputsInvalid );
-                    expect( result ).toBe("PKG1 0 175\nPKG2 0 275\nPKG3 35 665");
-                }
-            ).toThrow();
+        
+            arrTest.forEach( (element,index) => {
+                expect(
+                    () => {
+                        let result = deliveryCalculator.outputDeliveryCost( element );
+                    }
+                ).toThrow();
+            });
+    });
+
+    test("DeliveryCalculator - generate delivery time with invalid inputs", async () => {
+
+        let arrTest = [
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n1 2 A",
+            "100 3\nPKG1 5 5 OFR001\n\nPKG3 10 100 OFR003",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nA B C",
+        ]
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+        
+            arrTest.forEach( (element,index) => {
+                expect(
+                    () => {
+                        let result = deliveryCalculator.outputDeliveryTime( element );
+                    }
+                ).toThrow();
+            });
     });
 
     test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
@@ -178,8 +282,8 @@ describe("Delivery Cost Tests", () => {
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
 
-                let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
-                expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
+            let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
+            expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
 
             expect( deliveryCalculator.numberOfVehicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);

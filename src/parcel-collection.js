@@ -83,8 +83,7 @@ class ParcelCollection{
         arrGroups.sort(
             function( a , b){
                 if(a.weight * a.size < b.weight * b.size) return 1;
-                if(a.weight * a.size > b.weight * b.size) return -1;
-                return 0;
+                else return -1;
             }
         );
 
@@ -146,9 +145,9 @@ class ParcelCollection{
         while( tempParcelGroup.group[0] != endIndex) {
 
             for( let i=arraySize - 1; i>=0; i-- ){
-                var dmax = arraySize - i - 1;
+                var maxValueOfColumn = arraySize - i - 1;
 
-                if( tempParcelGroup.group[i] + 1 <= this.parcels.length - 1 - dmax ){
+                if( tempParcelGroup.group[i] + 1 <= this.parcels.length - 1 - maxValueOfColumn ){
                     tempParcelGroup.group[i]++;
                     let previousIndex = i;
                     for( let g = i + 1; g<= arraySize - 1; g++ ){
