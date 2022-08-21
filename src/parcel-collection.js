@@ -2,7 +2,7 @@ const Parcel = require('./parcel');
 
 class ParcelCollection{
 
-    constructor(  ){
+    constructor(){
         this.parcels = [];
         this.groups = [];
         this.vechicles = [];
@@ -60,7 +60,9 @@ class ParcelCollection{
         return vehicleIndex;
     }
 
-    groupParcels( deliveryCalculator ){
+    
+
+    getAllGroupPossibilities(maxLoad){
         let arrGroups = [];
         this.parcels.forEach( (parcel, index) => {
             if( index > 0 ) 
@@ -73,7 +75,7 @@ class ParcelCollection{
                 totalWeight += this.parcels[ arrGroups[i].group[j] ].weight;
             }
 
-            if( totalWeight > deliveryCalculator.maxLoad ){
+            if( totalWeight > maxLoad ){
                 arrGroups.splice(i--,1);
             }else{
                 arrGroups[i].weight = totalWeight;
@@ -86,7 +88,10 @@ class ParcelCollection{
                 else return -1;
             }
         );
+        return arrGroups;
+    }
 
+    getBestGroups( arrGroups ){
         var arrBestGroup  = [];
         while( arrGroups.length > 0 ){
             arrBestGroup.push( {weight:arrGroups[0].weight, group:arrGroups[0].group.concat(), size:arrGroups[0].size} );
@@ -112,7 +117,11 @@ class ParcelCollection{
                 }
             }
         }
-        this.groups = arrBestGroup;
+        return arrBestGroup;
+    }
+
+    groupParcels( deliveryCalculator ){
+        this.groups = this.getBestGroups( this.getAllGroupPossibilities(deliveryCalculator.maxLoad) );
         while( this.groups.length > 0 ){
             let vehicleIndex = this.getFastestAvailableVehicle();
             let longestTime = 0;
