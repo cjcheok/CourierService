@@ -9,7 +9,7 @@ class VoucherCollection{
                 if( !this.isVoucherCodeExist(input.split(" ")[0]) )
                     this.vouchers.push( new Voucher(input) );
                 else{
-                    throw new Error('Voucher code already exist.');
+                    throw new Error('Voucher Collection- Voucher code already exist.');
                 }
             }
         });

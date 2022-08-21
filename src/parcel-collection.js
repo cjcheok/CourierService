@@ -17,7 +17,7 @@ class ParcelCollection{
         if( !this.isParcelIDExist(inputs.split(" ")[0]) )
             this.parcels.push( new Parcel(inputs) );
         else{
-            throw new Error('Parcel ID already exist.');
+            throw new Error('Parcel Collection - Parcel ID already exist.');
         }
     }
     /*

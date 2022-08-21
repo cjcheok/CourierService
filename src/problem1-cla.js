@@ -26,11 +26,15 @@ try {
 /*
     Problem 01 Output
 */
-console.log('Problem 01');
-console.log('------------- Start -------------');
-console.log('Delivery Cost Input : \n');
-console.log( deliveryCostInputs + '\n--------------------------------' );
-console.log('Delivery Cost Output : \n');
-let deliveryCalculator = new DeliveryCalculator(10,5);
-deliveryCalculator.initVoucher( voucherInputs );
-console.log( deliveryCalculator.outputDeliveryCost( deliveryCostInputs ) + "\n------------- END -------------\n\n" );
+try{
+    console.log('Problem 01');
+    console.log('------------- Start -------------');
+    console.log('Delivery Cost Input : \n');
+    console.log( deliveryCostInputs + '\n--------------------------------' );
+    console.log('Delivery Cost Output : \n');
+    let deliveryCalculator = new DeliveryCalculator(10,5);
+    deliveryCalculator.initVoucher( voucherInputs );
+    console.log( deliveryCalculator.outputDeliveryCost( deliveryCostInputs ) + "\n------------- END -------------\n\n" );
+}catch(er){
+    console.log(`---> Error ${er.message}\n`);
+}

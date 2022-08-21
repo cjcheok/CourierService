@@ -30,11 +30,11 @@ class Parcel{
                 [this.id, this.weight, this.distance, this.voucherCode] = arrInputs;
             }
             else{
-                throw new Error('Invalid parameter formats.');
+                throw new Error('Parcel - Invalid parameter formats.');
             }
         }
         else{
-            throw new Error('Parameters mismatch.');
+            throw new Error('Parcel - Parameters mismatch.');
         }
     }
     

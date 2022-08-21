@@ -24,11 +24,16 @@ try {
 /*
     Problem 02 Output
 */
-console.log('Problem 02');
-console.log('------------- Start -------------');
-console.log('Delivery Time Input : \n');
-console.log( deliveryTimeInputs + '\n--------------------------------' );
-console.log('Delivery Time Output : \n');
-let deliveryCalculator = new DeliveryCalculator(10,5);
-deliveryCalculator.initVoucher( voucherInputs );
-console.log( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) + "\n------------- END -------------\n\n" );
+try{
+    console.log('Problem 02');
+    console.log('------------- Start -------------');
+    console.log('Delivery Time Input : \n');
+    console.log( deliveryTimeInputs + '\n--------------------------------' );
+    console.log('Delivery Time Output : \n');
+    let deliveryCalculator = new DeliveryCalculator(10,5);
+    deliveryCalculator.initVoucher( voucherInputs );
+    console.log( deliveryCalculator.outputDeliveryTime( deliveryTimeInputs ) + "\n------------- END -------------\n\n" );
+
+}catch(er){
+    console.log(`---> Error ${er.message}\n`);
+}
