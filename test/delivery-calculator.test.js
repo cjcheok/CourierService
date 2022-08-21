@@ -169,7 +169,6 @@ describe("Delivery Calculator Tests", () => {
             ).toThrow();
         });
     });
-
     test("Parcel - Calculate Cost", async () => {
 
         let arrTest = [
@@ -185,6 +184,14 @@ describe("Delivery Calculator Tests", () => {
     test("Voucher Collection - Create voucher collection from file input", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
         expect( voucherCollection.length() ).toBe(3);
+    });
+
+    test("Voucher Collection - Create voucher collection with duplicate voucher code", async () => {
+        expect( 
+            () => {
+                let voucherCollection = new VoucherCollection( "OFR001 10 0 200 70 200\nOFR002 7 50 150 100 150\nOFR003 5 50 250 10 150\nOFR003 5 50 250 10 150" );
+            }
+        ).toThrow();  
     });
     
     test("Voucher Collection - Search voucher by code", async () => {
@@ -255,6 +262,24 @@ describe("Delivery Calculator Tests", () => {
             "\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
             "100 C\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003",
+        ]
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+        
+            arrTest.forEach( (element,index) => {
+                expect(
+                    () => {
+                        let result = deliveryCalculator.outputDeliveryCost( element );
+                    }
+                ).toThrow();
+            });
+    });
+
+    test("DeliveryCalculator - generate delivery cost with duplicate parcel ID", async () => {
+
+        let arrTest = [
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG1 10 100 OFR003",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG2 10 100 OFR003",
         ]
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );

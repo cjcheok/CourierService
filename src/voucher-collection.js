@@ -6,11 +6,28 @@ class VoucherCollection{
         this.vouchers = [];
         inputs.split('\n').forEach( input => {
             if( input.length != 0 ) {
-                this.vouchers.push( new Voucher(input) );
+                if( !this.isVoucherCodeExist(input.split(" ")[0]) )
+                    this.vouchers.push( new Voucher(input) );
+                else{
+                    throw new Error('Voucher code already exist.');
+                }
             }
         });
     }
+    /*
+        Check if Voucher Code Exist, to avoid duplicate voucher code
+        - code: String
 
+        return isExist: Boolean
+    */
+        isVoucherCodeExist( code ){
+            let isExist = false;
+            this.vouchers.forEach( element => {
+                if( element.code == code ) isExist = true;
+            });
+    
+            return isExist;
+        }
     /*
         Get total number of vouchers
     */

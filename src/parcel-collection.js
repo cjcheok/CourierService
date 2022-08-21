@@ -14,7 +14,25 @@ class ParcelCollection{
         - inputs: String
     */
     addParcel( inputs ){
-        this.parcels.push( new Parcel(inputs) );
+        if( !this.isParcelIDExist(inputs.split(" ")[0]) )
+            this.parcels.push( new Parcel(inputs) );
+        else{
+            throw new Error('Parcel ID already exist.');
+        }
+    }
+    /*
+        Check if Parcel ID Exist, to avoid duplicate ID
+        - id: String
+
+        return isExist: Boolean
+    */
+    isParcelIDExist( id ){
+        let isExist = false;
+        this.parcels.forEach( element => {
+            if( element.id == id ) isExist = true;
+        });
+
+        return isExist;
     }
 
     /*
@@ -120,7 +138,8 @@ class ParcelCollection{
                 element.solo = true;
                 arrSolo.push( {group:[index], weight: element.weight, size:1} );
             }
-            else arrAvailable.push( {weight:element.weight,id:element.index}, );
+            else arrAvailable.push( {weight:element.weight,id:element.index}, );92
+
         });
         
         arrAvailable.forEach( (parcel, index) => {
