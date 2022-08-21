@@ -42,11 +42,11 @@ class DeliveryCalculator{
                         this.numberOfParcel = parseInt( arrParameters[1] );
                     }
                     else{
-                        throw new Error('DeliverCalculator - Invalid input format.');
+                        throw new Error('DeliveryCalculator - Invalid input format.');
                     }
 
                 }else{
-                    throw new Error('DeliverCalculator - Invalid input format.');
+                    throw new Error('DeliveryCalculator - Invalid input format.');
                 }
             }else if( i > 0 && i == this.numberOfParcel + 1 ) {
 
@@ -59,24 +59,24 @@ class DeliveryCalculator{
                         this.maxLoad = parseInt( arrParameters[2] );
                     }
                     else{
-                        throw new Error('DeliverCalculator - Invalid input format.');
+                        throw new Error('DeliveryCalculator - Invalid input format.');
                     }
 
                 }else{
-                    throw new Error('DeliverCalculator - Invalid input format.');
+                    throw new Error('DeliveryCalculator - Invalid input format.');
                 }
             }else{
                 
                 if( element != "" ){
                     this.parcelCollection.addParcel( element );
                 }else{
-                    throw new Error('DeliverCalculator - Invalid input format.');
+                    throw new Error('DeliveryCalculator - Invalid input format.');
                 }
             }
         });
 
         if( this.parcelCollection.length() != this.numberOfParcel ){
-            throw new Error('DeliverCalculator - Numbers of parcels does not match.');
+            throw new Error('DeliveryCalculator - Numbers of parcels does not match.');
         }
         this.parcelCollection.setNumberOfVehicles( this.numberOfVehicles );
     }
