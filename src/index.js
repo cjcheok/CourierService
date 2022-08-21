@@ -1,12 +1,8 @@
 
-let axrr = [1,2,3];
-let [ax2,bx,cx] = axrr;
 
-
-console.log( ax2, bx, cx);
-
-return;
-let arr = [
+let arrIndexReferences = [];
+let arr = [];
+let arrx = [
     {weight:50,id:0},
     {weight:75,id:1},
     {weight:175,id:2},
@@ -14,13 +10,33 @@ let arr = [
     {weight:155,id:0}
 ];
 
-let maxweight = 200;
+arrx.forEach( (element, index) => {
+    arrIndexReferences.push( {index:index, weight:element.weight, solo: false} );
+});
 
+arrIndexReferences.sort(
+    function( a , b){
+        if(a.weight< b.weight) return -1;
+        else return 1;
+    }
+);
+
+let maxweight = 200;
+let mostLight = arrIndexReferences[0];
 var garr = [];
+var arrSolo = [];
+
+arrIndexReferences.forEach( (element, index) => {
+    if( element.weight + mostLight.weight > maxweight ){
+        element.solo = true;
+        arrSolo.push( {index:[index], weight: element.weight, count:1} );
+    }
+    else arr.push( {weight:element.weight,id:element.index}, );
+});
+
 for( var ii=1; ii<arr.length; ii++){
     garr = garr.concat( getCombinations( 0, arr.length - 1, ii) );
 }
-
 
 function getCombinations( min, max, size ){
 
@@ -91,7 +107,7 @@ garr.sort(
         return 0;
     }
 );
-console.log(garr);
+garr = garr.concat(arrSolo);
 
 var gg = [];
 

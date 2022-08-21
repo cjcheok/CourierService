@@ -1,5 +1,8 @@
 # CourierService
 
+Project setup
+- run "npm install" to install dependencies
+
 Problem 01 - Delivery Cost
 - I'm using Parcel instead of Package to avoid confusion.
 - Define your vouchers and it's rules inside "inputs/vouchers.txt"

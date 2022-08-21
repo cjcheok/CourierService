@@ -294,10 +294,8 @@ describe("Delivery Calculator Tests", () => {
 
             let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
             expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
-
             expect( deliveryCalculator.numberOfVehicles ).toBe(2);
             expect( deliveryCalculator.maxSpeed ).toBe(70);
             expect( deliveryCalculator.maxLoad ).toBe(200);
-
     });
 });

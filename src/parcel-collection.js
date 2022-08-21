@@ -6,6 +6,7 @@ class ParcelCollection{
         this.parcels = [];
         this.groups = [];
         this.vechicles = [];
+        this.indexReferences = [];
     }
 
     /*
@@ -23,6 +24,7 @@ class ParcelCollection{
         this.vechicles = [];
         this.parcels = [];
         this.groups = [];
+        this.indexReferences = [];
     }
 
     /*
@@ -99,15 +101,38 @@ class ParcelCollection{
     */
     getAllGroupPossibilities(maxLoad){
         let arrGroups = [];
+
         this.parcels.forEach( (parcel, index) => {
-            if( index > 0 ) 
-                arrGroups = arrGroups.concat( this.generateAllGroupsBySize( index ) );
+            this.indexReferences.push( {index:index, weight:parcel.weight} );
         });
 
+        this.indexReferences.sort(
+            function( a , b){
+                if(a.weight< b.weight) return -1;
+                else return 1;
+            }
+        );
+        let arrSolo = [];
+        let arrAvailable = [];
+        let mostLight = this.indexReferences[0];
+        this.indexReferences.forEach( (element, index) => {
+            if( element.weight + mostLight.weight > maxLoad ){
+                element.solo = true;
+                arrSolo.push( {group:[index], weight: element.weight, size:1} );
+            }
+            else arrAvailable.push( {weight:element.weight,id:element.index}, );
+        });
+        
+        arrAvailable.forEach( (parcel, index) => {
+            if( index > 0 ) 
+                arrGroups = arrGroups.concat( this.generateAllGroupsBySize( arrAvailable.length, index ) );
+        });
+        arrGroups = arrGroups.concat(arrSolo);
+        
         for( let i=0; i<arrGroups.length; i++ ){
             let totalWeight = 0;
             for( let j=0; j<arrGroups[i].group.length; j++ ){
-                totalWeight += this.parcels[ arrGroups[i].group[j] ].weight;
+                totalWeight += this.parcels[  this.indexReferences[ arrGroups[i].group[j] ].index ].weight;
             }
 
             if( totalWeight > maxLoad ){
@@ -169,8 +194,8 @@ class ParcelCollection{
             let vehicleIndex = this.getFastestAvailableVehicle();
             let longestTime = 0;
             for( let i=0; i<this.groups[0].group.length; i++ ){
-                this.parcels[ this.groups[0].group[i] ].calculateTime( deliveryCalculator.maxSpeed, this.vechicles[vehicleIndex] );
-                if( this.parcels[ this.groups[0].group[i] ].travelTime > longestTime ) longestTime = this.parcels[ this.groups[0].group[i] ].travelTime;
+                this.parcels[ this.indexReferences[ this.groups[0].group[i]].index ].calculateTime( deliveryCalculator.maxSpeed, this.vechicles[vehicleIndex] );
+                if( this.parcels[ this.indexReferences[ this.groups[0].group[i] ].index ].travelTime > longestTime ) longestTime = this.parcels[ this.indexReferences[ this.groups[0].group[i]].index ].travelTime;
             }
             this.vechicles[vehicleIndex] += longestTime * 2;
             this.groups.shift();
@@ -184,12 +209,12 @@ class ParcelCollection{
 
         return groups: Array
     */
-    generateAllGroupsBySize( arraySize ){
+    generateAllGroupsBySize( totalPossibleParcels, arraySize ){
         var groups = [];
         var tempParcelGroup = [];
         var startIndex = 0;
         var index = startIndex;
-        var endIndex = (this.parcels.length - 1) - arraySize + 1;
+        var endIndex = (totalPossibleParcels - 1) - arraySize + 1;
 
         while( tempParcelGroup.length < arraySize ){
             tempParcelGroup.push( index++ );
