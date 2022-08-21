@@ -8,21 +8,37 @@ class ParcelCollection{
         this.vechicles = [];
     }
 
-
+    /*
+        Add Parcel into collection
+        - inputs: String
+    */
     addParcel( inputs ){
         this.parcels.push( new Parcel(inputs) );
     }
 
+    /*
+        Reset Collection
+    */
     reset(){
         this.vechicles = [];
         this.parcels = [];
         this.groups = [];
     }
 
+    /*
+        Get total parcels
+        
+        return length: Number
+    */
     length(){
         return this.parcels.length;
     }
 
+    /*
+        Get Cost Result output
+        - deliveryCalculator: DeliveryCalculator
+        return result: String
+    */    
     outputCost( deliveryCalculator ){
         let strOutput = '';
         this.parcels.forEach( parcel => {
@@ -32,6 +48,11 @@ class ParcelCollection{
         return strOutput.slice(0, -1);
     }
 
+    /*
+        Get Time Result output
+        - deliveryCalculator: DeliveryCalculator
+        return result: String
+    */    
     outputTime( deliveryCalculator ){
         let strOutput = '';
         this.parcels.forEach( parcel => {
@@ -41,6 +62,10 @@ class ParcelCollection{
         return strOutput.slice(0, -1);
     }
     
+    /*
+        Set number of vehicles
+        - numberOfVehicles: Number
+    */
     setNumberOfVehicles( numberOfVehicles ){
         this.vechicles = [];
         for( let i=0; i<numberOfVehicles; i++ ){
@@ -48,10 +73,16 @@ class ParcelCollection{
         }
     }
 
+    /*
+        Get Fastest Available Vehicle
+    
+        return vehicleIndex: Number
+    */
     getFastestAvailableVehicle(){
         let vehicleIndex = -1;
         let waitTime = 9999999;
         this.vechicles.forEach( (element,index) => {
+            // get shortest waitTime
             if( element < waitTime ){
                 waitTime = element;
                 vehicleIndex = index;
@@ -60,13 +91,17 @@ class ParcelCollection{
         return vehicleIndex;
     }
 
-    
+    /*
+        Generate All Possibility of the groups
+        - maxLoad: Number
 
+        return arrGroups: Array
+    */
     getAllGroupPossibilities(maxLoad){
         let arrGroups = [];
         this.parcels.forEach( (parcel, index) => {
             if( index > 0 ) 
-                arrGroups = arrGroups.concat( this.generateAllGroups( index ) );
+                arrGroups = arrGroups.concat( this.generateAllGroupsBySize( index ) );
         });
 
         for( let i=0; i<arrGroups.length; i++ ){
@@ -91,6 +126,10 @@ class ParcelCollection{
         return arrGroups;
     }
 
+    /*
+        Get the best groups combinations / most efficient
+        - arrGroups: Array
+    */
     getBestGroups( arrGroups ){
         var arrBestGroup  = [];
         while( arrGroups.length > 0 ){
@@ -120,6 +159,10 @@ class ParcelCollection{
         return arrBestGroup;
     }
 
+    /*
+        Group parcel into groups for Time estimation calculation
+        - deliveryCalculator: DeliveryCalculator
+    */
     groupParcels( deliveryCalculator ){
         this.groups = this.getBestGroups( this.getAllGroupPossibilities(deliveryCalculator.maxLoad) );
         while( this.groups.length > 0 ){
@@ -134,8 +177,14 @@ class ParcelCollection{
         }
     }
 
-    generateAllGroups( arraySize ){
 
+    /*
+        Generate All Possibility of the groups by size of the array
+        - arraySize: Number
+
+        return groups: Array
+    */
+    generateAllGroupsBySize( arraySize ){
         var groups = [];
         var tempParcelGroup = [];
         var startIndex = 0;

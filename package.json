@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "delivery-cost": "node src/delivery-cost-cla.js",
+    "problem1": "node src/problem1-cla.js",
+    "problem2": "node src/problem2-cla.js",
     "test delivery-cost": "jest ---delivery-cost.test.js",
     "test delivery-time-estimation": "jest ---delivery-time-estimation.test.js"
   },

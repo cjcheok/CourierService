@@ -7,7 +7,9 @@ const VoucherCollection = require('../src/voucher-collection');
 
 let fs = require('fs');
 
-// Load vouchers inputs
+/*
+    Load Vouchers list from text file.
+*/
 let voucherInputs = '';
 try {  
     voucherInputs = fs.readFileSync('inputs/vouchers.txt', 'utf8');
@@ -15,7 +17,9 @@ try {
     console.log('Error:', e.stack);
 }
 
-// Load vouchers
+/*
+    Load Delivery Code list from text file.
+*/
 let deliveryCostInputs = '';
 try {  
     deliveryCostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
@@ -23,6 +27,9 @@ try {
     console.log('Error:', e.stack);
 }
 
+/*
+    Load Delivery Time Estimation list from text file.
+*/
 let deliveryTimeInputs = '';
 try {  
     deliveryTimeInputs = fs.readFileSync('inputs/delivery-time-estimation.txt', 'utf8');
@@ -30,7 +37,10 @@ try {
     console.log('Error:', e.stack);
 }
 
-describe("Delivery Cost Tests", () => {
+
+
+
+describe("Delivery Calculator Tests", () => {
 
 
     const BASE_COST = 100;
@@ -179,8 +189,8 @@ describe("Delivery Cost Tests", () => {
     
     test("Voucher Collection - Search voucher by code", async () => {
         let voucherCollection = new VoucherCollection( voucherInputs );
-        expect( voucherCollection.find( 'OFR002' ) ).not.toBeNull();
-        expect( voucherCollection.find( 'OFR005' ) ).toBeNull();
+        expect( voucherCollection.findByCode( 'OFR002' ) ).not.toBeNull();
+        expect( voucherCollection.findByCode( 'OFR005' ) ).toBeNull();
     });
 
     test("Voucher Collection - Perform search by passing parcel object.", async () => {

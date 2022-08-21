@@ -16,10 +16,18 @@ class DeliveryCalculator{
         this.parcelCollection = new ParcelCollection();
     }
 
+    /*
+        Load voucher inputs
+        - inputs: String
+    */
     initVoucher( inputs ){
         this.voucherCollection = new VoucherCollection( inputs );
     }
 
+    /*
+        Load delivery inputs
+        - inputs: String
+    */
     processInputs( inputs){
         this.parcelCollection.reset();
         inputs.split("\n").forEach( (element, i) => {
@@ -73,6 +81,12 @@ class DeliveryCalculator{
         this.parcelCollection.setNumberOfVehicles( this.numberOfVehicles );
     }
 
+    /*
+        Perform Calculation Delivery Time Estimation and return result
+        - inputs: String
+
+        return result: String
+    */
     outputDeliveryTime( inputs ){
         
         this.processInputs( inputs );
@@ -80,6 +94,12 @@ class DeliveryCalculator{
         return this.parcelCollection.outputTime( this );
     }
 
+    /*
+        Perform Calculation Delivery Cost and return result
+        - inputs: String
+
+        return result: String
+    */
     outputDeliveryCost( inputs ){
 
         this.processInputs( inputs );
