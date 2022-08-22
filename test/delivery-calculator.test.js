@@ -293,6 +293,18 @@ describe("Delivery Calculator Tests", () => {
             });
     });
 
+    test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
+
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+
+            let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
+            expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
+            expect( deliveryCalculator.numberOfVehicles ).toBe(2);
+            expect( deliveryCalculator.maxSpeed ).toBe(70);
+            expect( deliveryCalculator.maxLoad ).toBe(200);
+    });
+
     test("DeliveryCalculator - generate delivery time with invalid inputs", async () => {
 
         let arrTest = [
@@ -312,15 +324,54 @@ describe("Delivery Calculator Tests", () => {
             });
     });
 
-    test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
+    test("DeliveryCalculator - Calculate Delivery Time with Max load lesser than parcel weight", async () => {
 
+        let arrTest = [
+            //"100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 10",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 9",
+        ]
             let deliveryCalculator = new DeliveryCalculator(10,5);
             deliveryCalculator.initVoucher( voucherInputs );
+        
+            arrTest.forEach( (element,index) => {
+                expect(
+                    () => {
+                        let result = deliveryCalculator.outputDeliveryTime( element );
+                    }
+                ).toThrow();
+            });
+    });
 
-            let result = deliveryCalculator.outputDeliveryTime( deliveryTimeInputs );
-            expect( result ).toBe('PKG1 0 750 3.98\nPKG2 0 1475 1.78\nPKG3 0 2350 1.42\nPKG4 105 1395 0.85\nPKG5 0 2125 4.19');
-            expect( deliveryCalculator.numberOfVehicles ).toBe(2);
-            expect( deliveryCalculator.maxSpeed ).toBe(70);
-            expect( deliveryCalculator.maxLoad ).toBe(200);
+
+    test("DeliveryCalculator - Calculate Delivery Time with huge max load, can fit all parcels in one vehicles", async () => {
+
+        let arrTest = [
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 1000",
+            //"100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 100",
+        ]
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+        
+            arrTest.forEach( (element,index) => {
+                let result = deliveryCalculator.outputDeliveryTime( element );
+            });
+    });
+
+    test("DeliveryCalculator - Calculate Delivery Time with max speed is zero or less", async () => {
+
+        let arrTest = [
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 0 1000",
+            "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 -70 100",
+        ]
+            let deliveryCalculator = new DeliveryCalculator(10,5);
+            deliveryCalculator.initVoucher( voucherInputs );
+        
+            arrTest.forEach( (element,index) => {
+                expect(
+                    () => {
+                        let result = deliveryCalculator.outputDeliveryTime( element );
+                    }
+                ).toThrow();
+            });
     });
 });

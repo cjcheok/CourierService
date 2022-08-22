@@ -119,10 +119,17 @@ class ParcelCollection{
     */
     getAllGroupPossibilities(maxLoad){
         let arrGroups = [];
-
+        let isParcelWeightWithinMaxLoad = true;
+        let allInOneGroup = [];
         this.parcels.forEach( (parcel, index) => {
             this.indexReferences.push( {index:index, weight:parcel.weight} );
+            allInOneGroup.push( index );
+            if( parcel.weight > maxLoad ) isParcelWeightWithinMaxLoad = false;
         });
+
+        if( !isParcelWeightWithinMaxLoad ) {
+            throw new Error('Max load is smaller / less than parcel weight.');
+        }
 
         this.indexReferences.sort(
             function( a , b){
@@ -138,9 +145,13 @@ class ParcelCollection{
                 element.solo = true;
                 arrSolo.push( {group:[index], weight: element.weight, size:1} );
             }
-            else arrAvailable.push( {weight:element.weight,id:element.index}, );92
+            else arrAvailable.push( {weight:element.weight,id:element.index}, );
 
         });
+
+        if( arrSolo.length == 0 ){
+            arrGroups.push( {group:allInOneGroup, weight:0, size:this.indexReferences.length } );
+        }
         
         arrAvailable.forEach( (parcel, index) => {
             if( index > 0 ) 

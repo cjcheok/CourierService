@@ -53,13 +53,27 @@ class DeliveryCalculator{
                 let arrParameters = element.split(" ");
                 if( arrParameters.length == 3 ){
 
-                    if( !isNaN( arrParameters[0] ) && !isNaN( arrParameters[1] ) && !isNaN( arrParameters[2] ) ){
-                        this.numberOfVehicles = parseInt( arrParameters[0] );
-                        this.maxSpeed = parseInt( arrParameters[1] );
-                        this.maxLoad = parseInt( arrParameters[2] );
+                    let hasErrors = false;
+                    let errMessage = '';
+                    for( let i=0;i<arrParameters.length;i++){
+                        if( !isNaN(arrParameters[i]) ){
+                            arrParameters[i] = parseInt(arrParameters[i]);
+                            if( arrParameters[i] <= 0 ){
+                                hasErrors = true;
+                                errMessage = 'DeliveryCalculator - Max Speed / Max Load / Number of vehicles cannot be less than equal to Zero.';
+                            }
+                        }
+                        else{
+                            hasErrors = true;
+                            errMessage = 'DeliveryCalculator - Invalid input format.';
+                            
+                        }
+                    }
+                    if( !hasErrors ){
+                        [this.numberOfVehicles, this.maxSpeed, this.maxLoad] = arrParameters;
                     }
                     else{
-                        throw new Error('DeliveryCalculator - Invalid input format.');
+                        throw new Error(errMessage);
                     }
 
                 }else{
