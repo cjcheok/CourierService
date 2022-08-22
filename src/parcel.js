@@ -50,7 +50,7 @@ class Parcel{
         return this.cost = baseCost + ( this.distance * distanceMultiplyer) + (weightMultiplyer * this.weight);
     }
 
-    calculateDiscount( discountPercentage ){
+    #calculateDiscount( discountPercentage ){
         return this.discount = this.cost * discountPercentage / 100;
     }
 
@@ -78,7 +78,7 @@ class Parcel{
     */
     calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
         this.calculateCost( baseCost, weightMultiplyer, distanceMultiplyer );
-        this.calculateDiscount( discountPercentage );
+        this.#calculateDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
     }
 

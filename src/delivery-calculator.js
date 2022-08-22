@@ -28,7 +28,7 @@ class DeliveryCalculator{
         Load delivery inputs
         - inputs: String
     */
-    processInputs( inputs){
+    #processInputs( inputs){
         this.parcelCollection.reset();
         inputs.split("\n").forEach( (element, i) => {
             
@@ -103,7 +103,7 @@ class DeliveryCalculator{
     */
     outputDeliveryTime( inputs ){
         
-        this.processInputs( inputs );
+        this.#processInputs( inputs );
         this.parcelCollection.groupParcels( this );
         return this.parcelCollection.outputTime( this );
     }
@@ -116,7 +116,7 @@ class DeliveryCalculator{
     */
     outputDeliveryCost( inputs ){
 
-        this.processInputs( inputs );
+        this.#processInputs( inputs );
         return this.parcelCollection.outputCost( this );
     }
 }

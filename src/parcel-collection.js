@@ -14,7 +14,7 @@ class ParcelCollection{
         - inputs: String
     */
     addParcel( inputs ){
-        if( !this.isParcelIDExist(inputs.split(" ")[0]) )
+        if( !this.#isParcelIDExist(inputs.split(" ")[0]) )
             this.parcels.push( new Parcel(inputs) );
         else{
             throw new Error('Parcel Collection - Parcel ID already exist.');
@@ -26,7 +26,7 @@ class ParcelCollection{
 
         return isExist: Boolean
     */
-    isParcelIDExist( id ){
+    #isParcelIDExist( id ){
         let isExist = false;
         this.parcels.forEach( element => {
             if( element.id == id ) isExist = true;
@@ -98,7 +98,7 @@ class ParcelCollection{
     
         return vehicleIndex: Number
     */
-    getFastestAvailableVehicle(){
+    #getFastestAvailableVehicle(){
         let vehicleIndex = -1;
         let waitTime = 9999999;
         this.vechicles.forEach( (element,index) => {
@@ -117,7 +117,7 @@ class ParcelCollection{
 
         return arrGroups: Array
     */
-    getAllGroupPossibilities(maxLoad){
+    #getAllGroupPossibilities(maxLoad){
         let arrGroups = [];
         let isParcelWeightWithinMaxLoad = true;
         let allInOneGroup = [];
@@ -185,7 +185,7 @@ class ParcelCollection{
         Get the best groups combinations / most efficient
         - arrGroups: Array
     */
-    getBestGroups( arrGroups ){
+    #getBestGroups( arrGroups ){
         var arrBestGroup  = [];
         while( arrGroups.length > 0 ){
             arrBestGroup.push( {weight:arrGroups[0].weight, group:arrGroups[0].group.concat(), size:arrGroups[0].size} );
@@ -219,9 +219,9 @@ class ParcelCollection{
         - deliveryCalculator: DeliveryCalculator
     */
     groupParcels( deliveryCalculator ){
-        this.groups = this.getBestGroups( this.getAllGroupPossibilities(deliveryCalculator.maxLoad) );
+        this.groups = this.#getBestGroups( this.#getAllGroupPossibilities(deliveryCalculator.maxLoad) );
         while( this.groups.length > 0 ){
-            let vehicleIndex = this.getFastestAvailableVehicle();
+            let vehicleIndex = this.#getFastestAvailableVehicle();
             let longestTime = 0;
             for( let i=0; i<this.groups[0].group.length; i++ ){
                 this.parcels[ this.indexReferences[ this.groups[0].group[i]].index ].calculateTime( deliveryCalculator.maxSpeed, this.vechicles[vehicleIndex] );

@@ -40,23 +40,23 @@ class Voucher{
         - parcel: Parcel
     */
     isEligible( parcel ){
-        return ( this.weightInRange(parcel.weight) && this.distanceInRange(parcel.distance) );
+        return ( this.#weightInRange(parcel.weight) && this.#distanceInRange(parcel.distance) );
     }
 
     /*
         Check if Weight is within range of the voucher.
         - weight: Number
     */
-    weightInRange( weight ){
-        return this.inRange(weight, this.minWeight, this.maxWeight );
+    #weightInRange( weight ){
+        return this.#inRange(weight, this.minWeight, this.maxWeight );
     }
 
     /*
         Check if Distance is within range of the voucher.
         - distance: Number
     */
-    distanceInRange( distance ){
-        return this.inRange(distance, this.minDistance, this.maxDistance );
+    #distanceInRange( distance ){
+        return this.#inRange(distance, this.minDistance, this.maxDistance );
     }
 
     /*
@@ -65,7 +65,7 @@ class Voucher{
         - min: Number
         - max: Number
     */
-    inRange( val, min, max ){
+    #inRange( val, min, max ){
         return (min <= val && val <= max );
     }
 }
