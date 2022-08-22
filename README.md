@@ -1,7 +1,9 @@
 # CourierService
 
 Project setup
-- run "npm install" to install dependencies
+- This project is build on nodejs.
+- You'll need to install nodejs, you can refer to https://nodejs.org/en/ for how to setup nodejs.
+- After install nodejs, open your terminal / commandline, navigate to the project folder and run "npm install" to install dependencies
 
 Problem 01 - Delivery Cost
 - I'm using Parcel instead of Package to avoid confusion.
