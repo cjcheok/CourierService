@@ -8,6 +8,19 @@ class DeliveryGroup{
 
     constructor( numberOfVehicles, maxLoad, maxSpeed ){
 
+
+        if( isNaN(numberOfVehicles) || numberOfVehicles <= 0  ){
+            throw new Error('Invalid numberOfVehicles input.');
+        }
+
+        if( isNaN(maxLoad) || maxLoad <= 0  ){
+            throw new Error('Invalid maxLoad input.');
+        }
+
+        if( isNaN(maxSpeed) || maxSpeed <= 0  ){
+            throw new Error('Invalid maxSpeed input..');
+        }
+
         this.maxLoad = maxLoad;
         this.maxSpeed = maxSpeed;
 
@@ -110,8 +123,20 @@ class DeliveryGroup{
         groups.push(new DeliveryGroupIndex(tempParcelGroup, 0, arraySize) );
         tempParcelGroup = new DeliveryGroupIndex( groups[groups.length - 1].group,0,arraySize);
 
-        while( tempParcelGroup.group[0] != endIndex) {
+        /*
+        totalPossibleParcels = [0,1,2,3]
+        arraySize = 2
 
+        meaning we will generate 2 item array
+        [0,1], [0,2],[0,3],[1,2],[1,3],[2,3]
+        */
+        while( tempParcelGroup.group[0] != endIndex) {
+            /*
+            calculate from last column
+            [0,1] -> [0,2] last column + 1 if it's not the max value.
+            [0,2] -> [0,3] 
+            [0,2] -> [1,2] if last column is already max value then (last column - 1) increment 1 value and last column = (last column - 1) - 1
+            */
             for( let i=arraySize - 1; i>=0; i-- ){
                 var maxValueOfColumn = arraySize - i - 1;
 
