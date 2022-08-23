@@ -4,9 +4,23 @@ const ParcelCollection = require('./parcel-collection');
 
 class DeliveryCalculator{
 
-    constructor( weightMultiplyer, distanceMultiplyer ){
-        this.weightMultiplyer = weightMultiplyer;
-        this.distanceMultiplyer = distanceMultiplyer;
+    constructor( inputs ){
+
+        let arrInputs = inputs.split(" ");
+        if( inputs.length < 2 || inputs[1] == "" ){
+            throw new Error('DeliveryCalculator - Paramters mismatch');
+        }
+
+        if( isNaN(arrInputs[0]) || parseInt(arrInputs[0]) < 0 ){
+            throw new Error('DeliveryCalculator - weight multiplyer must be numeric and greater than or equal to 0');
+        }
+        if( isNaN(arrInputs[1]) || parseInt(arrInputs[1]) < 0 ){
+            throw new Error('DeliveryCalculator - distance multiplyer must be numeric and greater than or equal to 0');
+        }
+
+
+        this.weightMultiplyer = parseInt(arrInputs[0]);
+        this.distanceMultiplyer = parseInt(arrInputs[1]);
         this.numberOfVehicles = 0;
         this.maxLoad = 0;
         this.maxSpeed = 0;

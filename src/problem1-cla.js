@@ -1,5 +1,15 @@
-const DeliveryCalculator = require('./delivery-calculator');
+const DeliveryCalculator = require('./libs/delivery-calculator');
 let fs = require('fs');
+
+/*
+    Load Configs
+*/
+let configInputs = '';
+try {  
+    configInputs = fs.readFileSync('storage/delivery-cost-calculation/configs.txt', 'utf8');
+} catch(e) {
+    console.log('Error:', e.stack);
+}
 
 
 /*
@@ -7,7 +17,7 @@ let fs = require('fs');
 */
 let voucherInputs = '';
 try {  
-    voucherInputs = fs.readFileSync('inputs/vouchers.txt', 'utf8');
+    voucherInputs = fs.readFileSync('storage/delivery-cost-calculation/vouchers.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
@@ -18,7 +28,7 @@ try {
 */
 let deliveryCostInputs = '';
 try {  
-    deliveryCostInputs = fs.readFileSync('inputs/delivery-cost.txt', 'utf8');
+    deliveryCostInputs = fs.readFileSync('storage/delivery-cost-calculation/packages.txt', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
@@ -32,7 +42,7 @@ try{
     console.log('Delivery Cost Input : \n');
     console.log( deliveryCostInputs + '\n--------------------------------' );
     console.log('Delivery Cost Output : \n');
-    let deliveryCalculator = new DeliveryCalculator(10,5);
+    let deliveryCalculator = new DeliveryCalculator(configInputs);
     deliveryCalculator.initVoucher( voucherInputs );
     console.log( deliveryCalculator.outputDeliveryCost( deliveryCostInputs ) + "\n------------- END -------------\n\n" );
 }catch(er){
