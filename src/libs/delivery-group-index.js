@@ -17,6 +17,14 @@ class DeliveryGroupIndex{
         });
 
     }
+
+    sumWeight( arrIndexes ){
+        let total = 0;
+        this.group.forEach( (element,index) => {
+            total += arrIndexes[element].weight;
+        });
+        return total;
+    }
 }
 
 module.exports = DeliveryGroupIndex;

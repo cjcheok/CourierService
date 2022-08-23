@@ -27,11 +27,14 @@ class DeliveryGroup{
         while( this.#groups.length > 0 ){
             let vehicleIndex = this.#getFastestAvailableVehicle();
             let longestTime = 0;
-            for( let i=0; i<this.#groups[0].group.length; i++ ){
-                parcelCollection.parcels[ this.#groupIndexes[ this.#groups[0].group[i]].index ].calculateTime( this.maxSpeed, this.#vehicles[vehicleIndex] );
-                if( parcelCollection.parcels[ this.#groupIndexes[ this.#groups[0].group[i] ].index ].travelTime > longestTime ) 
-                    longestTime = parcelCollection.parcels[ this.#groupIndexes[ this.#groups[0].group[i]].index ].travelTime;
-            }
+
+            this.#groups[0].group.forEach( (element, index) => {
+                let parcel = parcelCollection.parcels[ this.#groupIndexes[element].index ];
+                parcel.calculateTime( this.maxSpeed, this.#vehicles[vehicleIndex] );
+                if( parcel.travelTime > longestTime ) {
+                    longestTime = parcel.travelTime;
+                }
+            });
             this.#vehicles[vehicleIndex] += longestTime * 2;
             this.#groups.shift();
         }
@@ -40,23 +43,20 @@ class DeliveryGroup{
 
     #createParcelIndexs( parcelCollection ){
         this.#allParcelInOneGroup = [];
-        let isParcelWeightWithinMaxLoad = true;
         parcelCollection.parcels.forEach( (parcel, index) => {
             this.#groupIndexes.push( {index:index, weight:parcel.weight} );
             this.#allParcelInOneGroup.push( index );
+
             if( parcel.weight > this.maxLoad ){
-                isParcelWeightWithinMaxLoad = false;
+                throw new Error('Max load is smaller / less than parcel weight.');
             }
         });
-        if( !isParcelWeightWithinMaxLoad ) {
-            throw new Error('Max load is smaller / less than parcel weight.');
-        }
-        this.#groupIndexes.sort(
-            function( a , b){
-                if(a.weight< b.weight) return -1;
-                else return 1;
-            }
-        );
+        this.#groupIndexes.sort(this.#groupIndexSort);
+    }
+
+    #groupIndexSort( a, b){
+        if(a.weight< b.weight) return -1;
+        else return 1;
     }
 
     #getParcelListThatCanShareSlot(){
@@ -78,26 +78,23 @@ class DeliveryGroup{
             if( index > 0 ) 
                 arrGroups = arrGroups.concat( this.#generateAllGroupsBySize( arrAvailableParcelCombination.length, index ) );
         });
-        arrGroups = arrGroups.concat(arrOnlyOneParcel);
-        for( let i=0; i<arrGroups.length; i++ ){
-            let totalWeight = 0;
-            for( let j=0; j<arrGroups[i].group.length; j++ ){
-                totalWeight += this.#groupIndexes[ arrGroups[i].group[j] ].weight;
-            }
+        this.#groups = arrGroups.concat(arrOnlyOneParcel);
+        this.#filterGroupsThatWithinMaxLoad();
 
-            if( totalWeight > this.maxLoad ){
-                arrGroups.splice(i--,1);
-            }else{
-                arrGroups[i].weight = totalWeight;
-            }
-        }
-        arrGroups.sort(
-            function( a , b){
-                if(a.weight * a.size < b.weight * b.size) return 1;
-                else return -1;
-            }
-        );
-        this.#groups = arrGroups;
+    }
+
+    #filterGroupsThatWithinMaxLoad(){
+        this.#groups.forEach( (element, index, arr) => {
+            let totalWeight = element.sumWeight(this.#groupIndexes);
+            arr[index].weight = totalWeight > this.maxLoad ? 0 : totalWeight;
+        });
+
+        this.#groups.sort( this.#sortBySizeWeight);
+    }
+    
+    #sortBySizeWeight( a,b ){
+        if(a.weight * a.size < b.weight * b.size) return 1;
+        else return -1;
     }
 
     #generateAllGroupsBySize( totalPossibleParcels, arraySize ){
@@ -138,20 +135,21 @@ class DeliveryGroup{
         var arrBestGroup  = [];
         while( this.#groups.length > 0 ){
             arrBestGroup.push( this.#groups[0] );
-            var arrIndexs = this.#groups[0].group.concat();
-            for( let i=0; i<this.#groups.length; i++ ){
-                if( this.#groups[i].isIndexExistInGroup(arrIndexs) !== undefined ){
-                    this.#groups.splice( i--, 1);
-                }
-            }
+            this.#removeIndexesFromGroup( this.#groups[0].group.concat() );
         }
         return arrBestGroup;
+    }
+    #removeIndexesFromGroup( arrIndexs ){
+        for( let i=0; i<this.#groups.length; i++ ){
+            if( this.#groups[i].isIndexExistInGroup(arrIndexs) !== undefined ){
+                this.#groups.splice( i--, 1);
+            }
+        }
     }
     #getFastestAvailableVehicle(){
         let vehicleIndex = -1;
         let waitTime = 9999999;
         this.#vehicles.forEach( (element,index) => {
-            // get shortest waitTime
             if( element < waitTime ){
                 waitTime = element;
                 vehicleIndex = index;
