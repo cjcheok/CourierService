@@ -64,7 +64,7 @@ class Parcel{
     calculateTime( maxSpeed, startTime ){
         this.travelTime = parseFloat( (this.distance / maxSpeed).toFixed(3).slice(0,-1) );
         this.startTime = startTime;
-        this.totalTime = (this.startTime + this.travelTime).toFixed(2);
+        this.totalTime = parseFloat( (this.startTime + this.travelTime).toFixed(2) );
     }
 
     /*

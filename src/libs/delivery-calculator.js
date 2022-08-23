@@ -1,6 +1,7 @@
 const VoucherCollection = require('./voucher-collection');
 const Parcel = require('./parcel');
 const ParcelCollection = require('./parcel-collection');
+const DeliveryGroup = require('./delivery-group');
 
 class DeliveryCalculator{
 
@@ -10,14 +11,12 @@ class DeliveryCalculator{
         if( inputs.length < 2 || inputs[1] == "" ){
             throw new Error('DeliveryCalculator - Paramters mismatch');
         }
-
         if( isNaN(arrInputs[0]) || parseInt(arrInputs[0]) < 0 ){
             throw new Error('DeliveryCalculator - weight multiplyer must be numeric and greater than or equal to 0');
         }
         if( isNaN(arrInputs[1]) || parseInt(arrInputs[1]) < 0 ){
             throw new Error('DeliveryCalculator - distance multiplyer must be numeric and greater than or equal to 0');
         }
-
 
         this.weightMultiplyer = parseInt(arrInputs[0]);
         this.distanceMultiplyer = parseInt(arrInputs[1]);
@@ -106,7 +105,7 @@ class DeliveryCalculator{
         if( this.parcelCollection.length() != this.numberOfParcel ){
             throw new Error('DeliveryCalculator - Numbers of parcels does not match.');
         }
-        this.parcelCollection.setNumberOfVehicles( this.numberOfVehicles );
+        //this.parcelCollection.setNumberOfVehicles( this.numberOfVehicles );
     }
 
     /*
@@ -118,7 +117,9 @@ class DeliveryCalculator{
     outputDeliveryTime( inputs ){
         
         this.#processInputs( inputs );
-        this.parcelCollection.groupParcels( this );
+        let deliveryGroup = new DeliveryGroup( this.numberOfVehicles, this.maxLoad, this.maxSpeed );
+        //this.parcelCollection.groupParcels( this );
+        deliveryGroup.calculateTime( this.parcelCollection );
         return this.parcelCollection.outputTime( this );
     }
 
@@ -129,7 +130,6 @@ class DeliveryCalculator{
         return result: String
     */
     outputDeliveryCost( inputs ){
-
         this.#processInputs( inputs );
         return this.parcelCollection.outputCost( this );
     }
