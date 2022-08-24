@@ -20,14 +20,14 @@ class VoucherCollection{
 
         return isExist: Boolean
     */
-        isVoucherCodeExist( code ){
-            let isExist = false;
-            this.vouchers.forEach( element => {
-                if( element.code == code ) isExist = true;
-            });
-    
-            return isExist;
-        }
+    isVoucherCodeExist( code ){
+        let isExist = false;
+        this.vouchers.forEach( element => {
+            if( element.code == code ) isExist = true;
+        });
+
+        return isExist;
+    }
     /*
         Get total number of vouchers
     */

@@ -30,7 +30,10 @@ class DeliveryGroup{
     }
 
 
-
+    /*
+        Calculate Delivery Time estimation
+        - parcelCollection : ParcelCollection
+    */
     calculateTime( parcelCollection ){
 
         this.#createParcelIndexs( parcelCollection );
@@ -54,6 +57,12 @@ class DeliveryGroup{
 
     }
 
+    /*
+        create all parcel array index reference. and valid parcel weight and maxload.
+        if single parcel weight > maxload then throw error.
+        - a : Array Element
+        - b : Array Element
+    */
     #createParcelIndexs( parcelCollection ){
         this.#allParcelInOneGroup = [];
         parcelCollection.parcels.forEach( (parcel, index) => {
@@ -67,11 +76,19 @@ class DeliveryGroup{
         this.#groupIndexes.sort(this.#groupIndexSort);
     }
 
+    /*
+        Array Sort - Priority : weight
+        - a : Array Element
+        - b : Array Element
+    */
     #groupIndexSort( a, b){
         if(a.weight< b.weight) return -1;
         else return 1;
     }
 
+    /*
+        Creat all group combinations
+    */
     #getParcelListThatCanShareSlot(){
         let arrGroups = [];
         let arrOnlyOneParcel = [];
@@ -96,6 +113,10 @@ class DeliveryGroup{
 
     }
 
+    /*
+        Calculate each group's total weight
+        if total weight > maxLoad then weight will be 0.
+    */
     #filterGroupsThatWithinMaxLoad(){
         this.#groups.forEach( (element, index, arr) => {
             let totalWeight = element.sumWeight(this.#groupIndexes);
@@ -105,11 +126,29 @@ class DeliveryGroup{
         this.#groups.sort( this.#sortBySizeWeight);
     }
     
+    /*
+        Array Sort - Priority : Size, weight
+        - a : Array Element
+        - b : Array Element
+    */
     #sortBySizeWeight( a,b ){
         if(a.weight * a.size < b.weight * b.size) return 1;
         else return -1;
     }
 
+    /*
+        Total Parcels = [0,1,2,3]
+        generateAllGroupsBySize( 4, 2)
+        [0,1] [0,2] [0,3] [1,2] [1,3] [2,3]
+
+        generateAllGroupsBySize( 4, 3)
+        [0,1,2] [0,1,3] [0,2,3], [1,2,3]
+
+        Generate all combination of group
+        - totalPossibleParcels: Number
+        - arraySize: Number
+        return groups: Array
+    */
     #generateAllGroupsBySize( totalPossibleParcels, arraySize ){
         var groups = [];
         var tempParcelGroup = [];
@@ -155,7 +194,10 @@ class DeliveryGroup{
         }
         return groups;
     }
-
+    /*
+        Find the best combination of the group
+        return arrBestGroup: Array
+    */
     #getBestGroups(){
         var arrBestGroup  = [];
         while( this.#groups.length > 0 ){
@@ -164,6 +206,11 @@ class DeliveryGroup{
         }
         return arrBestGroup;
     }
+
+    /*
+        Remove element in groups if the index exist in group's group
+        - arrIndexs: Array
+    */
     #removeIndexesFromGroup( arrIndexs ){
         for( let i=0; i<this.#groups.length; i++ ){
             if( this.#groups[i].isIndexExistInGroup(arrIndexs) !== undefined ){
@@ -171,6 +218,11 @@ class DeliveryGroup{
             }
         }
     }
+
+    /*
+        Return Fastest Available vehicle Index
+        return vehicleIndex: Number
+    */
     #getFastestAvailableVehicle(){
         let vehicleIndex = -1;
         let waitTime = 9999999;

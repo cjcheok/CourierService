@@ -28,6 +28,10 @@ class DeliveryGroupIndex{
         this.size = size;
     }
 
+    /*
+        Check if the index exist in group
+        - arrays: Array - An array of index to check.
+    */
     isIndexExistInGroup( arrays ){
         return arrays.find( (element) =>{
             let b = this.group.find( (groupIndex) => {
@@ -37,7 +41,10 @@ class DeliveryGroupIndex{
         });
 
     }
-
+    /*
+        sum all weight
+        - arrIndexes: Array ( get weight from the array base on group's index)
+    */
     sumWeight( arrIndexes ){
         let total = 0;
         this.group.forEach( (element,index) => {
