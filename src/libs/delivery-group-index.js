@@ -1,11 +1,31 @@
 class DeliveryGroupIndex{
 
     constructor( group, weight, size ){
+
+        if( !Array.isArray( group)  ){
+            throw new Error('Invalid group input.');
+        }
+
+        if( isNaN(weight) || weight < 0  ){
+            throw new Error('Invalid weight input.');
+        }
+
+        if( isNaN(size) || size < 0  ){
+            throw new Error('Invalid size input.');
+        }
+        if( group.length != size  ){
+            throw new Error('Group size and size doesnt not match.');
+        }
+
+        group.forEach( (element) => {
+            if( isNaN(element) || element < 0 ){
+                throw new Error('Group element can only be positive integer.');
+            }
+        });
+
         this.group = group.concat();
         this.weight = weight;
         this.size = size;
-        this.startTime = 0;
-        this.travelTime = 0;
     }
 
     isIndexExistInGroup( arrays ){
