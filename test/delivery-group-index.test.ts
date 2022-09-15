@@ -1,14 +1,14 @@
-const DeliveryGroupIndex = require('../src/libs/delivery-group-index');
+import { DeliveryGroupIndex } from "../src/libs/delivery-group-index";
 
 describe("Delivery Group Index Tests", () => {
     test("Delivery Group Index - Constructor with valid parameters", async () => {
-        let deliveryGroupIndex = new DeliveryGroupIndex( [0], 200, 1);
+        let deliveryGroupIndex:DeliveryGroupIndex = new DeliveryGroupIndex( [0], 200, 1);
         
     });
 
     test("Delivery Group Index - Constructor with invalid parameters", async () => {
 
-        let arrTest = [
+        let arrTest:any[] = [
             [[2,9], 200, 1],
             [[0], 200, 2],
             [[0], 'A', 1],
@@ -18,10 +18,10 @@ describe("Delivery Group Index Tests", () => {
             [[0,-1], 200,2],
         ];
         
-        arrTest.forEach( (element, index) => {
+        arrTest.forEach( (element:any, index:number) => {
             expect(
                 () =>{
-                    let deliveryGroupIndex = new DeliveryGroupIndex(element[0], element[1], element[2]);
+                    let deliveryGroupIndex:DeliveryGroupIndex = new DeliveryGroupIndex(element[0], element[1], element[2]);
                 }
             ).toThrow();
         });

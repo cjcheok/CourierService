@@ -1,23 +1,17 @@
-
-
-const DeliveryCalculator = require('../src/libs/delivery-calculator');
-const Voucher = require('../src/libs/voucher');
-const Parcel = require('../src/libs/parcel');
-const VoucherCollection = require('../src/libs/voucher-collection');
-
-
-const voucherInputs = 'OFR001 10 0 200 70 200\nOFR002 7 50 150 100 150\nOFR003 5 50 250 10 150';
-const deliveryCostInputs = '100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003';
-const deliveryTimeInputs = '100 5\nPKG1 50 30 OFR001\nPKG2 75 125 OFR008\nPKG3 175 100 OFR003\nPKG4 110 60 OFR002\nPKG5 155 95 NA\n2 70 200';
-const configInputs = '10 5';
-const BASE_COST = 100;
-const WEIGHT_MULTIPLYER = 10;
-const DISTANCE_MULTIPLYER = 5;
+import { DeliveryCalculator } from "../src/libs/delivery-calculator";
 
 describe("Delivery Calculator Tests", () => {
+    const voucherInputs = 'OFR001 10 0 200 70 200\nOFR002 7 50 150 100 150\nOFR003 5 50 250 10 150';
+    const deliveryCostInputs = '100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003';
+    const deliveryTimeInputs = '100 5\nPKG1 50 30 OFR001\nPKG2 75 125 OFR008\nPKG3 175 100 OFR003\nPKG4 110 60 OFR002\nPKG5 155 95 NA\n2 70 200';
+    const configInputs = '10 5';
+    const BASE_COST = 100;
+    const WEIGHT_MULTIPLYER = 10;
+    const DISTANCE_MULTIPLYER = 5;
 
+    
     test("DeliveryCalculator - constructor with valid inputs", async () => {
-        let deliveryCalculator = new DeliveryCalculator(configInputs);
+        let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
         expect( deliveryCalculator.weightMultiplyer ).toBe(10);
         expect( deliveryCalculator.distanceMultiplyer ).toBe(5);
     });
@@ -34,7 +28,7 @@ describe("Delivery Calculator Tests", () => {
             
             expect(
                 () => {
-                    let deliveryCalculator = new DeliveryCalculator(element);
+                    let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(element);
                 }
             ).toThrow();
             
@@ -42,7 +36,7 @@ describe("Delivery Calculator Tests", () => {
     });
 
     test("DeliveryCalculator - generate delivery cost with valid inputs", async () => {
-        let deliveryCalculator = new DeliveryCalculator(configInputs);
+        let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
         deliveryCalculator.initVoucher( voucherInputs );
 
         let result = deliveryCalculator.outputDeliveryCost( deliveryCostInputs );
@@ -76,7 +70,7 @@ describe("Delivery Calculator Tests", () => {
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG1 10 100 OFR003",
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG2 10 100 OFR003",
         ]
-            let deliveryCalculator = new DeliveryCalculator(configInputs);
+            let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
             deliveryCalculator.initVoucher( voucherInputs );
         
             arrTest.forEach( (element,index) => {
@@ -90,7 +84,7 @@ describe("Delivery Calculator Tests", () => {
 
     test("DeliveryCalculator - generate delivery time with valid inputs", async () => {
 
-        let deliveryCalculator = new DeliveryCalculator(configInputs);
+        let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
         deliveryCalculator.initVoucher( voucherInputs );
 
         let arrTest = [
@@ -117,7 +111,7 @@ describe("Delivery Calculator Tests", () => {
             "100 3\nPKG1 5 5 OFR001\n\nPKG3 10 100 OFR003",
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\nA B C",
         ]
-            let deliveryCalculator = new DeliveryCalculator(configInputs);
+            let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
             deliveryCalculator.initVoucher( voucherInputs );
         
             arrTest.forEach( (element,index) => {
@@ -135,7 +129,7 @@ describe("Delivery Calculator Tests", () => {
             //"100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 10",
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 70 9",
         ]
-            let deliveryCalculator = new DeliveryCalculator(configInputs);
+            let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
             deliveryCalculator.initVoucher( voucherInputs );
         
             arrTest.forEach( (element,index) => {
@@ -153,7 +147,7 @@ describe("Delivery Calculator Tests", () => {
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 0 1000",
             "100 3\nPKG1 5 5 OFR001\nPKG2 15 5 OFR002\nPKG3 10 100 OFR003\n2 -70 100",
         ]
-            let deliveryCalculator = new DeliveryCalculator(configInputs);
+            let deliveryCalculator:DeliveryCalculator = new DeliveryCalculator(configInputs);
             deliveryCalculator.initVoucher( voucherInputs );
         
             arrTest.forEach( (element,index) => {

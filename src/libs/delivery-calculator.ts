@@ -1,13 +1,22 @@
-const VoucherCollection = require('./voucher-collection');
-const Parcel = require('./parcel');
-const ParcelCollection = require('./parcel-collection');
-const DeliveryGroup = require('./delivery-group');
+import { DeliveryGroup } from "./delivery-group";
+import { ParcelCollection } from "./parcel-collection";
+import { VoucherCollection } from "./voucher-collection";
 
-class DeliveryCalculator{
+export class DeliveryCalculator{
 
-    constructor( inputs ){
+    weightMultiplyer: number;
+    distanceMultiplyer: number;
+    numberOfVehicles: number;
+    maxLoad: number;
+    maxSpeed: number;
+    baseCost: number;
+    numberOfParcel: number;
+    voucherCollection: VoucherCollection;
+    parcelCollection: ParcelCollection;
 
-        let arrInputs = inputs.split(" ");
+    constructor( inputs :string ){
+
+        let arrInputs: any[] = inputs.split(" ");
         if( inputs.length < 2 || inputs[1] == "" ){
             throw new Error('DeliveryCalculator - Paramters mismatch');
         }
@@ -33,7 +42,7 @@ class DeliveryCalculator{
         Load voucher inputs
         - inputs: String
     */
-    initVoucher( inputs ){
+    initVoucher( inputs: string ){
         this.voucherCollection = new VoucherCollection( inputs );
     }
 
@@ -41,13 +50,13 @@ class DeliveryCalculator{
         Load delivery inputs
         - inputs: String
     */
-    #processInputs( inputs){
+    #processInputs( inputs:string ){
         this.parcelCollection.reset();
         inputs.split("\n").forEach( (element, i) => {
             
             if( i == 0 ){
                 
-                let arrParameters = element.split(" ");
+                let arrParameters: any[] = element.split(" ");
                 if( arrParameters.length == 2 ){
 
                     if( !isNaN( arrParameters[0] ) && !isNaN( arrParameters[1] ) ){
@@ -63,7 +72,7 @@ class DeliveryCalculator{
                 }
             }else if( i > 0 && i == this.numberOfParcel + 1 ) {
 
-                let arrParameters = element.split(" ");
+                let arrParameters: any[] = element.split(" ");
                 if( arrParameters.length == 3 ){
 
                     let hasErrors = false;
@@ -114,10 +123,10 @@ class DeliveryCalculator{
 
         return result: String
     */
-    outputDeliveryTime( inputs ){
+    outputDeliveryTime( inputs: string ){
         
         this.#processInputs( inputs );
-        let deliveryGroup = new DeliveryGroup( this.numberOfVehicles, this.maxLoad, this.maxSpeed );
+        let deliveryGroup:DeliveryGroup = new DeliveryGroup( this.numberOfVehicles, this.maxLoad, this.maxSpeed );
         //this.parcelCollection.groupParcels( this );
         deliveryGroup.calculateTime( this.parcelCollection );
         return this.parcelCollection.outputTime( this );
@@ -129,10 +138,8 @@ class DeliveryCalculator{
 
         return result: String
     */
-    outputDeliveryCost( inputs ){
+    outputDeliveryCost( inputs: string ){
         this.#processInputs( inputs );
         return this.parcelCollection.outputCost( this );
     }
 }
-
-module.exports = DeliveryCalculator;

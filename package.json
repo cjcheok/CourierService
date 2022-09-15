@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "problem1": "node src/problem1-cla.js",
-    "problem2": "node src/problem2-cla.js",
+    "problem1": "node dist/problem1-cla.js",
+    "problem2": "node dist/problem2-cla.js",
     "test delivery-cost": "jest ---delivery-cost.test.js",
     "test delivery-time-estimation": "jest ---delivery-time-estimation.test.js"
   },
@@ -24,5 +24,10 @@
   "dependencies": {
     "jest": "^28.1.3",
     "save-dev": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.8",
+    "ts-jest": "^28.0.8",
+    "typescript": "^4.7.4"
   }
 }

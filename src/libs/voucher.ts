@@ -1,8 +1,15 @@
-const Parcel = require('./parcel');
-class Voucher{
+import { Parcel } from "./parcel";
 
+export class Voucher{
 
-    constructor( inputs ){
+    code: string;
+    percentage: number;
+    minDistance: number;
+    maxDistance: number;
+    minWeight: number;
+    maxWeight: number;
+
+    constructor( inputs: string ){
         
         this.code = '';
         this.percentage = 0;
@@ -11,10 +18,9 @@ class Voucher{
         this.minWeight = 0;
         this.maxWeight = 0;        
 
-        let arrInputs = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
+        let arrInputs: any[] = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
         if( arrInputs.length == 6 ){
             
-
             let hasError = false;
             for( let i=1; i<arrInputs.length; i++ ){
                 if( isNaN(arrInputs[i]) || parseFloat(arrInputs[i]) < 0 ) {
@@ -39,7 +45,7 @@ class Voucher{
         Check if Weight & Distance is within range of the voucher.
         - parcel: Parcel
     */
-    isEligible( parcel ){
+    isEligible( parcel: Parcel ){
         return ( this.#weightInRange(parcel.weight) && this.#distanceInRange(parcel.distance) );
     }
 
@@ -47,7 +53,7 @@ class Voucher{
         Check if Weight is within range of the voucher.
         - weight: Number
     */
-    #weightInRange( weight ){
+    #weightInRange( weight: number ){
         return this.#inRange(weight, this.minWeight, this.maxWeight );
     }
 
@@ -55,7 +61,7 @@ class Voucher{
         Check if Distance is within range of the voucher.
         - distance: Number
     */
-    #distanceInRange( distance ){
+    #distanceInRange( distance: number ){
         return this.#inRange(distance, this.minDistance, this.maxDistance );
     }
 
@@ -65,9 +71,7 @@ class Voucher{
         - min: Number
         - max: Number
     */
-    #inRange( val, min, max ){
+    #inRange( val: number, min: number, max: number ){
         return (min <= val && val <= max );
     }
 }
-
-module.exports = Voucher;

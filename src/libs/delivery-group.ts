@@ -1,12 +1,16 @@
-const DeliveryGroupIndex = require('./delivery-group-index');
+import { DeliveryGroupIndex } from "./delivery-group-index";
+import { Parcel } from "./parcel";
+import { ParcelCollection } from "./parcel-collection";
 
-class DeliveryGroup{
-    #groups = [];
-    #groupIndexes = [];
-    #vehicles = [];
-    #allParcelInOneGroup = [];
+export class DeliveryGroup{
+    #groups: DeliveryGroupIndex[] = [];
+    #groupIndexes: any[] = [];
+    #vehicles: number[] = [];
+    #allParcelInOneGroup: number[] = [];
+    maxLoad: number;
+    maxSpeed: number;
 
-    constructor( numberOfVehicles, maxLoad, maxSpeed ){
+    constructor( numberOfVehicles: number, maxLoad: number, maxSpeed: number ){
 
 
         if( isNaN(numberOfVehicles) || numberOfVehicles <= 0  ){
@@ -34,7 +38,7 @@ class DeliveryGroup{
         Calculate Delivery Time estimation
         - parcelCollection : ParcelCollection
     */
-    calculateTime( parcelCollection ){
+    calculateTime( parcelCollection: ParcelCollection ){
 
         this.#createParcelIndexs( parcelCollection );
         this.#getParcelListThatCanShareSlot();
@@ -63,9 +67,9 @@ class DeliveryGroup{
         - a : Array Element
         - b : Array Element
     */
-    #createParcelIndexs( parcelCollection ){
+    #createParcelIndexs( parcelCollection: ParcelCollection ){
         this.#allParcelInOneGroup = [];
-        parcelCollection.parcels.forEach( (parcel, index) => {
+        parcelCollection.parcels.forEach( (parcel:Parcel, index:number) => {
             this.#groupIndexes.push( {index:index, weight:parcel.weight} );
             this.#allParcelInOneGroup.push( index );
 
@@ -81,7 +85,7 @@ class DeliveryGroup{
         - a : Array Element
         - b : Array Element
     */
-    #groupIndexSort( a, b){
+    #groupIndexSort( a: any, b: any){
         if(a.weight< b.weight) return -1;
         else return 1;
     }
@@ -90,9 +94,9 @@ class DeliveryGroup{
         Creat all group combinations
     */
     #getParcelListThatCanShareSlot(){
-        let arrGroups = [];
-        let arrOnlyOneParcel = [];
-        let arrAvailableParcelCombination = [];
+        let arrGroups: DeliveryGroupIndex[] = [];
+        let arrOnlyOneParcel: DeliveryGroupIndex[] = [];
+        let arrAvailableParcelCombination: number[] = [];
         let mostLight = this.#groupIndexes[0];
         this.#groupIndexes.forEach( (element, index) => {
             if( element.weight + mostLight.weight > this.maxLoad ){
@@ -131,7 +135,7 @@ class DeliveryGroup{
         - a : Array Element
         - b : Array Element
     */
-    #sortBySizeWeight( a,b ){
+    #sortBySizeWeight( a: DeliveryGroupIndex,b: DeliveryGroupIndex ){
         if(a.weight * a.size < b.weight * b.size) return 1;
         else return -1;
     }
@@ -149,9 +153,10 @@ class DeliveryGroup{
         - arraySize: Number
         return groups: Array
     */
-    #generateAllGroupsBySize( totalPossibleParcels, arraySize ){
+    #generateAllGroupsBySize( totalPossibleParcels: number, arraySize: number ){
         var groups = [];
-        var tempParcelGroup = [];
+        var tempParcelGroup:number[] = [];
+        var tempParcelGroupIndex:DeliveryGroupIndex;
         var startIndex = 0;
         var index = startIndex;
         var endIndex = (totalPossibleParcels - 1) - arraySize + 1;
@@ -160,7 +165,7 @@ class DeliveryGroup{
             tempParcelGroup.push( index++ );
         }
         groups.push(new DeliveryGroupIndex(tempParcelGroup, 0, arraySize) );
-        tempParcelGroup = new DeliveryGroupIndex( groups[groups.length - 1].group,0,arraySize);
+        tempParcelGroupIndex = new DeliveryGroupIndex( groups[groups.length - 1].group,0,arraySize);
 
         /*
         totalPossibleParcels = [0,1,2,3]
@@ -169,7 +174,7 @@ class DeliveryGroup{
         meaning we will generate 2 item array
         [0,1], [0,2],[0,3],[1,2],[1,3],[2,3]
         */
-        while( tempParcelGroup.group[0] != endIndex) {
+        while( tempParcelGroupIndex.group[0] != endIndex) {
             /*
             calculate from last column
             [0,1] -> [0,2] last column + 1 if it's not the max value.
@@ -179,18 +184,18 @@ class DeliveryGroup{
             for( let i=arraySize - 1; i>=0; i-- ){
                 var maxValueOfColumn = arraySize - i - 1;
 
-                if( tempParcelGroup.group[i] + 1 <= this.#groupIndexes.length - 1 - maxValueOfColumn ){
-                    tempParcelGroup.group[i]++;
+                if( tempParcelGroupIndex.group[i] + 1 <= this.#groupIndexes.length - 1 - maxValueOfColumn ){
+                    tempParcelGroupIndex.group[i]++;
                     let previousIndex = i;
                     for( let g = i + 1; g<= arraySize - 1; g++ ){
-                        tempParcelGroup.group[g] = tempParcelGroup.group[previousIndex] + 1;
+                        tempParcelGroupIndex.group[g] = tempParcelGroupIndex.group[previousIndex] + 1;
                         previousIndex = g;
                     }
                     break;
                 }
             }
-            groups.push( tempParcelGroup );
-            tempParcelGroup = new DeliveryGroupIndex( groups[groups.length - 1].group,0,arraySize);
+            groups.push( tempParcelGroupIndex );
+            tempParcelGroupIndex = new DeliveryGroupIndex( groups[groups.length - 1].group,0,arraySize);
         }
         return groups;
     }
@@ -211,7 +216,7 @@ class DeliveryGroup{
         Remove element in groups if the index exist in group's group
         - arrIndexs: Array
     */
-    #removeIndexesFromGroup( arrIndexs ){
+    #removeIndexesFromGroup( arrIndexs: number[] ){
         for( let i=0; i<this.#groups.length; i++ ){
             if( this.#groups[i].isIndexExistInGroup(arrIndexs) !== undefined ){
                 this.#groups.splice( i--, 1);
@@ -235,5 +240,3 @@ class DeliveryGroup{
         return vehicleIndex;
     }
 }
-
-module.exports = DeliveryGroup;

@@ -4,11 +4,12 @@ Project setup
 - This project is build on nodejs.
 - You'll need to install nodejs, you can refer to https://nodejs.org/en/ for how to setup nodejs.
 - After install nodejs, open your terminal / commandline, navigate to the project folder and run "npm install" to install dependencies
-- "npm install" to install dependencies
-- "npm run test" to run test
-- "npm run problem1" to run problem1, inputs are located at storage/delivery-cost-calculation/
-- "npm run problem2" to run problem2, inputs are located at storage/delivery-time-calculation/
-
+- type "npm install -g typescript" to install typescript compiler package.
+- type "npm install" to install dependencies
+- type "npm run test" to run test
+- type "tsc" to compile ts to js before running "npm run problem1" or "npm run problem2"
+- type "npm run problem1" to run problem1, inputs are located at storage/delivery-cost-calculation/
+- type "npm run problem2" to run problem2, inputs are located at storage/delivery-time-calculation/
 
 Problem 01 - Delivery Cost
 - I'm using Parcel instead of Package to avoid confusion.

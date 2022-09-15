@@ -1,6 +1,9 @@
-const Parcel = require('./parcel');
+import { DeliveryCalculator } from "./delivery-calculator";
+import { Parcel } from "./parcel";
 
-class ParcelCollection{
+export class ParcelCollection{
+
+    parcels: Parcel[];
 
     constructor(){
         this.parcels = [];
@@ -10,7 +13,7 @@ class ParcelCollection{
         Add Parcel into collection
         - inputs: String
     */
-    addParcel( inputs ){
+    addParcel( inputs: string ){
         if( !this.#isParcelIDExist(inputs.split(" ")[0]) )
             this.parcels.push( new Parcel(inputs) );
         else{
@@ -23,9 +26,9 @@ class ParcelCollection{
 
         return isExist: Boolean
     */
-    #isParcelIDExist( id ){
+    #isParcelIDExist( id: string ){
         let isExist = false;
-        this.parcels.forEach( element => {
+        this.parcels.forEach( (element: Parcel) => {
             if( element.id == id ) isExist = true;
         });
 
@@ -53,7 +56,7 @@ class ParcelCollection{
         - deliveryCalculator: DeliveryCalculator
         return result: String
     */    
-    outputCost( deliveryCalculator ){
+    outputCost( deliveryCalculator: DeliveryCalculator ){
         let strOutput = '';
         this.parcels.forEach( parcel => {
             parcel.calculateTotal( deliveryCalculator.baseCost, deliveryCalculator.weightMultiplyer, deliveryCalculator.distanceMultiplyer, deliveryCalculator.voucherCollection.getDiscount( parcel )  );
@@ -67,7 +70,7 @@ class ParcelCollection{
         - deliveryCalculator: DeliveryCalculator
         return result: String
     */    
-    outputTime( deliveryCalculator ){
+    outputTime( deliveryCalculator: DeliveryCalculator ){
         let strOutput = '';
         this.parcels.forEach( parcel => {
             parcel.calculateTotal( deliveryCalculator.baseCost, deliveryCalculator.weightMultiplyer, deliveryCalculator.distanceMultiplyer, deliveryCalculator.voucherCollection.getDiscount( parcel )  );
@@ -77,5 +80,3 @@ class ParcelCollection{
     }
     
 }
-
-module.exports = ParcelCollection;

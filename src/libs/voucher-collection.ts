@@ -1,8 +1,10 @@
-const Voucher = require('./voucher');
-const Parcel = require('./parcel');
-class VoucherCollection{
+import { Parcel } from "./parcel";
+import { Voucher } from "./voucher";
 
-    constructor( inputs ){
+export class VoucherCollection{
+    vouchers: Voucher[];
+
+    constructor( inputs: string ){
         this.vouchers = [];
         inputs.split('\n').forEach( input => {
             if( input.length != 0 ) {
@@ -20,7 +22,7 @@ class VoucherCollection{
 
         return isExist: Boolean
     */
-    isVoucherCodeExist( code ){
+    isVoucherCodeExist( code: string ){
         let isExist = false;
         this.vouchers.forEach( element => {
             if( element.code == code ) isExist = true;
@@ -41,7 +43,7 @@ class VoucherCollection{
 
         return foundVoucher : Voucher or null if does not match.
     */
-    findByCode( code ){
+    findByCode( code: string ){
         let foundVoucher = null;
         this.vouchers.forEach( voucher => {
             if( voucher.code == code ) {
@@ -57,8 +59,8 @@ class VoucherCollection{
 
         return voucher : Voucher or null if does not match.
     */
-    match( parcel ){
-        let voucher = this.findByCode( parcel.voucherCode );
+    match( parcel: Parcel ){    
+        let voucher: any = this.findByCode( parcel.voucherCode );
         return (voucher && voucher.isEligible(parcel) ) ? voucher : null;
     }
 
@@ -68,11 +70,9 @@ class VoucherCollection{
 
         return discount value : Number
     */
-    getDiscount( parcel ) {
-        let voucher = this.match( parcel );
+    getDiscount( parcel: Parcel ) {
+        let voucher: any = this.match( parcel );
         return voucher ? voucher.percentage : 0;
     }
 
 }
-
-module.exports = VoucherCollection;

@@ -1,6 +1,10 @@
-class DeliveryGroupIndex{
+export class DeliveryGroupIndex{
 
-    constructor( group, weight, size ){
+    group: number[];
+    weight: number;
+    size: number;
+
+    constructor( group: number[], weight: number, size: number ){
 
         if( !Array.isArray( group)  ){
             throw new Error('Invalid group input.');
@@ -32,7 +36,7 @@ class DeliveryGroupIndex{
         Check if the index exist in group
         - arrays: Array - An array of index to check.
     */
-    isIndexExistInGroup( arrays ){
+    isIndexExistInGroup( arrays: number[] ){
         return arrays.find( (element) =>{
             let b = this.group.find( (groupIndex) => {
                 return groupIndex === element;
@@ -45,13 +49,11 @@ class DeliveryGroupIndex{
         sum all weight
         - arrIndexes: Array ( get weight from the array base on group's index)
     */
-    sumWeight( arrIndexes ){
+    sumWeight( arrIndexes: any[] ){
         let total = 0;
-        this.group.forEach( (element,index) => {
+        this.group.forEach( (element :number,index) => {
             total += arrIndexes[element].weight;
         });
         return total;
     }
 }
-
-module.exports = DeliveryGroupIndex;

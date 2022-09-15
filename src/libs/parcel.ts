@@ -1,6 +1,17 @@
-class Parcel{
+export class Parcel{
 
-    constructor( inputs ){
+    id: string;
+    weight: number;
+    distance: number;
+    voucherCode: string;
+    startTime: number;
+    travelTime: number;
+    totalTime: number;
+    total: number;
+    discount: number;
+    cost: number;
+
+    constructor(inputs: string ){
 
         this.id = '';
         this.weight = 0;
@@ -14,7 +25,7 @@ class Parcel{
         this.discount = 0;
         this.cost = 0;
         
-        let arrInputs = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
+        let arrInputs: any[] = inputs.replace(/(\r\n|\n|\r)/gm, "").split(' ');
         if( arrInputs.length >= 3 ){
 
             let hasError = false;
@@ -46,7 +57,7 @@ class Parcel{
         
         return cost: Number
     */
-    calculateCost( baseCost, weightMultiplyer, distanceMultiplyer ){
+    calculateCost( baseCost: number, weightMultiplyer: number, distanceMultiplyer: number ){
         return this.cost = baseCost + ( this.distance * distanceMultiplyer) + (weightMultiplyer * this.weight);
     }
 
@@ -56,7 +67,7 @@ class Parcel{
         
         return discount: Number
     */
-    #calculateDiscount( discountPercentage ){
+    #calculateDiscount( discountPercentage: number ){
         return this.discount = this.cost * discountPercentage / 100;
     }
 
@@ -67,7 +78,7 @@ class Parcel{
         
         return totalTime: Number
     */
-    calculateTime( maxSpeed, startTime ){
+    calculateTime( maxSpeed: number, startTime: number ){
         this.travelTime = parseFloat( (this.distance / maxSpeed).toFixed(3).slice(0,-1) );
         this.startTime = startTime;
         this.totalTime = parseFloat( (this.startTime + this.travelTime).toFixed(2) );
@@ -82,7 +93,7 @@ class Parcel{
         
         return totalCost: Number
     */
-    calculateTotal( baseCost, weightMultiplyer, distanceMultiplyer, discountPercentage ){
+    calculateTotal( baseCost: number, weightMultiplyer: number, distanceMultiplyer: number, discountPercentage: number ){
         this.calculateCost( baseCost, weightMultiplyer, distanceMultiplyer );
         this.#calculateDiscount( discountPercentage );
         return this.total = this.cost - this.discount;
@@ -104,5 +115,3 @@ class Parcel{
         return this.id + ' ' + this.discount + ' ' + this.total + ' ' + this.totalTime + '\n';
     }
 }
-
-module.exports = Parcel;
